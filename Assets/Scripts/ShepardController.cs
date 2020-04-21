@@ -37,13 +37,7 @@ public class ShepardController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (characterController.isGrounded)
-            {
-                Debug.Log("Space");
-                //rigidBody.AddForce(new Vector3(0, jump, 0));
-                movementDirection = new Vector3(0, jump, 0);
-                characterController.Move(movementDirection);
-            }
+            Shout();
         }
 
         float horizontal = Input.GetAxis("Horizontal");
@@ -59,6 +53,42 @@ public class ShepardController : MonoBehaviour
 
         movementDirection.y -= gravity * Time.deltaTime;
         characterController.Move(movementDirection * Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            CommandFront();
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            CommandRear();
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            CommandLeft();
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            CommandRight();
+        }
     }
-        
+    public void Shout()
+    {
+        Debug.Log("shouting");
+    }
+
+    public void CommandLeft()
+    {
+        Debug.Log("Commanding dog to the left");
+    }
+    public void CommandRight()
+    {
+        Debug.Log("Commanding dog to the right");
+    }
+    public void CommandFront()
+    {
+        Debug.Log("Commanding dog to the front");
+    }
+    public void CommandRear()
+    {
+        Debug.Log("Commanding dog to the rear");
+    }
 }
