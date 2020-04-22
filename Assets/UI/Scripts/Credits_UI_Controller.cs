@@ -28,6 +28,6 @@ public class Credits_UI_Controller : MonoBehaviour
 
     public void ReturnToMain()
     {
-        EditorSceneManager.LoadScene("MainMenuScene");
+        EditorSceneManager.LoadScene("Main Menu WIP");
     }
 }
