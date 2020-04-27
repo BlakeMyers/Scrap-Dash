@@ -34,15 +34,22 @@ public class ShepardController : MonoBehaviour
         {
             movementSpeed /= 2.0f;
         }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Shout();
-        }
-
-        float horizontal = Input.GetAxis("Horizontal");
+        //float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-        transform.Rotate(0, horizontal * rotationSpeed * Time.deltaTime, 0);
+        Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+        Vector2 mousePos = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        float angle = Mathf.Atan2(positionOnScreen.y - mousePos.y, positionOnScreen.x - mousePos.x) * Mathf.Rad2Deg;
+        //transform.Rotate(0, angle * rotationSpeed * Time.deltaTime, 0);
+        //transform.rotation = Quaternion.Euler(new Vector3(0f, -angle, 0f));
+        Plane playerPlane = new Plane(Vector3.up, transform.position);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        float hitDistance = 0.0f;
+        if(playerPlane.Raycast(ray, out hitDistance))
+        {
+            Vector3 targetPoint = ray.GetPoint(hitDistance);
+            Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
         if (characterController.isGrounded)
         {
             //bool move = (vertical > 0) || (horizontal != 0);
@@ -53,42 +60,5 @@ public class ShepardController : MonoBehaviour
 
         movementDirection.y -= gravity * Time.deltaTime;
         characterController.Move(movementDirection * Time.deltaTime);
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            CommandFront();
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            CommandRear();
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            CommandLeft();
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            CommandRight();
-        }
-    }
-    public void Shout()
-    {
-        Debug.Log("shouting");
-    }
-
-    public void CommandLeft()
-    {
-        Debug.Log("Commanding dog to the left");
-    }
-    public void CommandRight()
-    {
-        Debug.Log("Commanding dog to the right");
-    }
-    public void CommandFront()
-    {
-        Debug.Log("Commanding dog to the front");
-    }
-    public void CommandRear()
-    {
-        Debug.Log("Commanding dog to the rear");
     }
 }
