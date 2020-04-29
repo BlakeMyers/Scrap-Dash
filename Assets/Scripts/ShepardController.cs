@@ -14,6 +14,8 @@ public class ShepardController : MonoBehaviour
     [SerializeField]
     private float jump;
     public Rigidbody rigidBody;
+    public Collider pickUpCollider;
+    public bool isWeaponEquiped = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,13 +36,15 @@ public class ShepardController : MonoBehaviour
         {
             movementSpeed /= 2.0f;
         }
-        //float horizontal = Input.GetAxis("Horizontal");
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            DropWeapon();
+        }
         float vertical = Input.GetAxis("Vertical");
         Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
         Vector2 mousePos = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
         float angle = Mathf.Atan2(positionOnScreen.y - mousePos.y, positionOnScreen.x - mousePos.x) * Mathf.Rad2Deg;
-        //transform.Rotate(0, angle * rotationSpeed * Time.deltaTime, 0);
-        //transform.rotation = Quaternion.Euler(new Vector3(0f, -angle, 0f));
+
         Plane playerPlane = new Plane(Vector3.up, transform.position);
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         float hitDistance = 0.0f;
@@ -52,7 +56,6 @@ public class ShepardController : MonoBehaviour
         }
         if (characterController.isGrounded)
         {
-            //bool move = (vertical > 0) || (horizontal != 0);
             movementDirection = Vector3.forward * vertical;
             movementDirection = transform.TransformDirection(movementDirection);
             movementDirection *= movementSpeed;
@@ -60,5 +63,35 @@ public class ShepardController : MonoBehaviour
 
         movementDirection.y -= gravity * Time.deltaTime;
         characterController.Move(movementDirection * Time.deltaTime);
+    }
+    public void DropWeapon()
+    {
+        pickUpCollider.isTrigger = false;
+        Transform weapon = transform.GetChild(0).GetChild(0);
+        weapon.SetParent(null);
+        Rigidbody weaponRB = weapon.GetComponent<Rigidbody>();
+        weaponRB.isKinematic = false;
+        weaponRB.AddForce(transform.right*150);
+        pickUpCollider.isTrigger = true;
+        isWeaponEquiped = false;
+    }
+    public void EquipWeapon(Transform weaponTransform)
+    {
+        weaponTransform.rotation = transform.rotation;
+        weaponTransform.SetParent(transform.GetChild(0));
+        weaponTransform.position = transform.GetChild(0).position;
+        weaponTransform.GetComponent<Rigidbody>().isKinematic = true;
+        isWeaponEquiped = true;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Weapon")
+        {
+            Debug.Log("Weapon Detected");
+            if (isWeaponEquiped == false)
+            {
+                EquipWeapon(other.GetComponentInParent<Transform>());
+            }
+        }
     }
 }
