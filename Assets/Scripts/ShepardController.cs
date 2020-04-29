@@ -73,6 +73,7 @@ public class ShepardController : MonoBehaviour
         weaponRB.isKinematic = false;
         weaponRB.AddForce(transform.right*150);
         pickUpCollider.isTrigger = true;
+        weapon.GetComponent<GunController>().GunDropped();
         isWeaponEquiped = false;
     }
     public void EquipWeapon(Transform weaponTransform)
@@ -81,6 +82,7 @@ public class ShepardController : MonoBehaviour
         weaponTransform.SetParent(transform.GetChild(0));
         weaponTransform.position = transform.GetChild(0).position;
         weaponTransform.GetComponent<Rigidbody>().isKinematic = true;
+        weaponTransform.GetComponent<GunController>().GunEquipped();
         isWeaponEquiped = true;
     }
     private void OnTriggerEnter(Collider other)

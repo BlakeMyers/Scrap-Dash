@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 258304450}
   - component: {fileID: 258304449}
   - component: {fileID: 258304448}
-  - component: {fileID: 258304452}
+  - component: {fileID: 258304453}
   m_Layer: 0
   m_Name: WeaponPickup (1)
   m_TagString: Weapon
@@ -293,7 +293,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &258304452
+--- !u!114 &258304453
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -305,7 +305,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d360108cf6922b499e9a17430ec9bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 0}
+  bullet: {fileID: 2390434893114701159, guid: ffd533b15e4901544b2d50755895f2f1, type: 3}
   isEquipped: 0
 --- !u!1 &386970060
 GameObject:
@@ -1348,7 +1348,7 @@ GameObject:
   - component: {fileID: 1749101946}
   - component: {fileID: 1749101951}
   - component: {fileID: 1749101950}
-  - component: {fileID: 1749101947}
+  - component: {fileID: 1749101948}
   m_Layer: 0
   m_Name: WeaponPickup
   m_TagString: Weapon
@@ -1369,7 +1369,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5, z: 2}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1749101947
+--- !u!114 &1749101948
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1381,7 +1381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d360108cf6922b499e9a17430ec9bb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 0}
+  bullet: {fileID: 2390434893114701159, guid: ffd533b15e4901544b2d50755895f2f1, type: 3}
   isEquipped: 0
 --- !u!4 &1749101949
 Transform:
