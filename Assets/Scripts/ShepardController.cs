@@ -10,15 +10,18 @@ public class ShepardController : MonoBehaviour
     private float rotationSpeed = 250.0f;
     private float gravity = 20.0f;
     private CharacterController characterController;
+    public PlayerStats stats;
     private Vector3 movementDirection;
     [SerializeField]
     private float jump;
     public Rigidbody rigidBody;
     public Collider pickUpCollider;
     public bool isWeaponEquiped = false;
+    Camera mainCamera;
     // Start is called before the first frame update
     void Start()
     {
+        movementSpeed = stats.speed;
         rotationSpeed = 250.0f;
         characterController = GetComponent<CharacterController>();
         rigidBody = GetComponent<Rigidbody>();
@@ -42,25 +45,33 @@ public class ShepardController : MonoBehaviour
         }
         float vertical = Input.GetAxis("Vertical");
         Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
-        Vector2 mousePos = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
-        float angle = Mathf.Atan2(positionOnScreen.y - mousePos.y, positionOnScreen.x - mousePos.x) * Mathf.Rad2Deg;
-
-        Plane playerPlane = new Plane(Vector3.up, transform.position);
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float hitDistance = 0.0f;
-        if(playerPlane.Raycast(ray, out hitDistance))
+        Vector2 mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
+        Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        float rayLength;
+        if(groundPlane.Raycast(cameraRay, out rayLength))
         {
-            Vector3 targetPoint = ray.GetPoint(hitDistance);
-            Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            Vector3 pointToLook = cameraRay.GetPoint(rayLength);
+            transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
         }
+
+        //float angle = Mathf.Atan2(positionOnScreen.y - mousePos.y, positionOnScreen.x - mousePos.x) * Mathf.Rad2Deg;
+
+        //Plane playerPlane = new Plane(Vector3.up, transform.position);
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //float hitDistance = 0.0f;
+        //if(playerPlane.Raycast(ray, out hitDistance))
+        //{
+        //    Vector3 targetPoint = ray.GetPoint(hitDistance);
+        //    Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        //}
         if (characterController.isGrounded)
         {
             movementDirection = Vector3.forward * vertical;
             movementDirection = transform.TransformDirection(movementDirection);
             movementDirection *= movementSpeed;
         }
-
         movementDirection.y -= gravity * Time.deltaTime;
         characterController.Move(movementDirection * Time.deltaTime);
     }

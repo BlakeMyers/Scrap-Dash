@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class GunController : MonoBehaviour
 {
-    float muzzleVelocity = 1200f;
+    public float muzzleVelocity = 1200f;
+    public float damage = 5f;
+    public float ammoCapacity = 5f;
+    public float ammoInGun = 5f;
+    public float totalAmmo = 20f;
     public GameObject bullet;
     static List<GameObject> bulletList = new List<GameObject>();
     public bool isEquipped = false;
     void Start()
     {
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 200; i++)
         {
             GameObject bulletObj = (GameObject)Instantiate(bullet);
             bulletObj.SetActive(false);
@@ -18,14 +22,21 @@ public class GunController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (isEquipped)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                GunFire();
+                if (ammoInGun > 0)
+                {
+                    GunFire();
+                    ammoInGun--;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                GunReload();
             }
         }
     }
@@ -33,12 +44,33 @@ public class GunController : MonoBehaviour
     public void GunEquipped()
     {
         isEquipped = true;
-
     }
     public void GunDropped()
     {
         isEquipped = false;
  
+    }
+    public void GunReload()
+    {
+        if (ammoInGun == 0)
+        {
+            if (totalAmmo >= ammoCapacity)
+            {
+                ammoInGun += ammoCapacity;
+                totalAmmo -= ammoCapacity;
+            }
+            else if (totalAmmo > 0)
+            {
+                ammoInGun += totalAmmo;
+                totalAmmo -= totalAmmo;
+            }
+        }
+        else if(ammoInGun < ammoCapacity)
+        {
+            float difference = ammoCapacity - ammoInGun;
+            totalAmmo -= difference;
+            ammoInGun += difference;
+        }
     }
     public void GunFire()
     {
