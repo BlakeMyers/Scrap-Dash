@@ -12,6 +12,8 @@ public class PlayerStats : MonoBehaviour
     public float score = 0f;
     public int upgradePoints = 0;
     public float totalAmmo = 30f;
+    public float ammoInGun = 5f;
+    public float reserveAmmo = 0f;
     void Start()
     {
         totalAmmo = 30f;
@@ -22,7 +24,11 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (gameObject.GetComponent<ShepardController>().isWeaponEquiped)
+        {
+            ammoInGun = GetComponentInChildren<GunController>().ammoInGun;
+            reserveAmmo = GetComponentInChildren<GunController>().reserveAmmo;
+        }
     }
 
     public void CalculateUpgradePoints()

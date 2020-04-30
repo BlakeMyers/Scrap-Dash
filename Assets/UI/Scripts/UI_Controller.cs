@@ -9,9 +9,16 @@ public class UI_Controller : MonoBehaviour
     public GameObject HudPanel;
     public GameObject PausePanel;
     public Text TimeText;
+    public Text healthText;
     public Text GoalText;
+    public Text ammoText;
     bool pausetime = false;
-    float time = 0.0f;
+    public float time = 600.0f;
+    public GameObject Player;
+    float playerHealth;
+    float playerReserveAmmo;
+    float playerAmmoInGun;
+    float playerScrap;
     void Start()
     { 
 
@@ -25,14 +32,21 @@ public class UI_Controller : MonoBehaviour
             Pause();
         }
         if (!pausetime) {
-            time += Time.deltaTime;
+            time -= Time.deltaTime;
         }
     }
 
     private void FixedUpdate()
     {
+        playerHealth = Player.GetComponent<PlayerStats>().currentHealth;
+        playerReserveAmmo = Player.GetComponent<PlayerStats>().reserveAmmo;
+        playerAmmoInGun = Player.GetComponent<PlayerStats>().ammoInGun;
+        playerScrap = Player.GetComponent<PlayerStats>().scrapCount;
 
-        TimeText.text = "Time: \n" + time.ToString("0.0");
+        TimeText.text = "Time Remaining: " + time.ToString("0.0");
+        ammoText.text = "Ammo: " + playerAmmoInGun.ToString() + "/" + playerReserveAmmo.ToString();
+        GoalText.text = "Scrap: " + playerScrap.ToString();
+        healthText.text = "Health: " + playerHealth.ToString();
     }
 
     private void Pause()
