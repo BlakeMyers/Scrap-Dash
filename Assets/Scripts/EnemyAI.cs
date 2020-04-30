@@ -60,7 +60,7 @@ public class EnemyAI : MonoBehaviour
         RaycastHit hit;
         Vector3 direction = this.transform.forward + eyeOffset + (this.transform.position - player.transform.position).normalized;
         if (Vector3.SignedAngle(this.transform.forward, direction, Vector3.up) > fov) {
-            return false;
+            return true;
         }
 
         Ray ray = new Ray(this.transform.forward + eyeOffset, direction);
