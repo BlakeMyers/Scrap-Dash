@@ -58,8 +58,9 @@ public class EnemyAI : MonoBehaviour
 
         float visibility = 0;
         RaycastHit hit;
-        Vector3 direction = this.transform.forward + eyeOffset + (this.transform.position - player.transform.position).normalized;
-        if (Vector3.SignedAngle(this.transform.forward, direction, Vector3.up) > fov) {
+        Vector3 direction = player.transform.position - this.transform.position;
+        if (Vector3.Angle(this.transform.forward, direction) <= fov / 2) {
+            Debug.Log("In Sight");
             return true;
         }
 
@@ -67,9 +68,6 @@ public class EnemyAI : MonoBehaviour
         if (Physics.Raycast(ray, out hit, visibilityDistance))
         {
             return true;
-        }
-        else {
-            return false;
         }
 
         return false;
