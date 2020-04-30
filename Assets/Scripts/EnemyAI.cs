@@ -10,7 +10,7 @@ public class EnemyAI : MonoBehaviour
     public float fov = 130;
     public float visibilityDistance = 5;
 
-    public float intelligenceMod = 1;
+    public float intelligenceMod = 10;
 
     public Vector3 eyeOffset = new Vector3(0, 0, 0);
 
@@ -39,6 +39,8 @@ public class EnemyAI : MonoBehaviour
     void Update(){
         if (IsVisible())
             memory += intelligenceMod * Time.deltaTime;
+        else
+            memory -= intelligenceMod / 2 * Time.deltaTime;
 
         memory = Mathf.Clamp(memory, 0, MaxMemory);
 
@@ -55,25 +57,22 @@ public class EnemyAI : MonoBehaviour
     }
 
     bool IsVisible() {
-
-        float visibility = 0;
         RaycastHit hit;
         Vector3 direction = player.transform.position - this.transform.position;
         if (Vector3.Angle(this.transform.forward, direction) <= fov / 2) {
-            Debug.Log("In Sight");
-            return true;
-        }
-
-        Ray ray = new Ray(this.transform.forward + eyeOffset, direction);
-        if (Physics.Raycast(ray, out hit, visibilityDistance))
-        {
-            return true;
+            Ray ray = new Ray(this.transform.position + eyeOffset, direction);
+            Debug.DrawRay(ray.origin, ray.direction);
+            if (Physics.Raycast(ray, out hit, visibilityDistance))
+            {
+                return true;
+            }
         }
 
         return false;
     }
 
     void MoveToPlayer() {
+        Debug.Log("Moving to Player");
         Vector3 moveDir = Vector3.zero;
         RaycastHit hit;
         Vector3 direction = this.transform.forward + eyeOffset + (this.transform.position - player.transform.position).normalized;
@@ -93,6 +92,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     void Idle() {
+        Debug.Log("Idle");
         Vector3 direction = new Vector3(Random.Range(0, 1), 0, Random.Range(0, 1));
         rigid.MoveRotation(Quaternion.LookRotation(direction, Vector3.up));
 

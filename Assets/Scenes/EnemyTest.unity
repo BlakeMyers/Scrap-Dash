@@ -231,7 +231,7 @@ GameObject:
   - component: {fileID: 536394400}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -466,7 +466,7 @@ GameObject:
   - component: {fileID: 1265131280}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -588,7 +588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fov: 130
   visibilityDistance: 5
-  intelligenceMod: 1
+  intelligenceMod: 10
   eyeOffset: {x: 0, y: 0, z: 0}
   Acceleration: 10
   maxSpeed: 20
