@@ -12,7 +12,7 @@ public class EnemyAI : MonoBehaviour
 
     public float intelligenceMod = 1;
 
-    public Vector3 visibilityShift = new Vector3(0, 0, 0);
+    public Vector3 eyeOffset = new Vector3(0, 0, 0);
 
     public float Acceleration = 10;
     public float maxSpeed = 20;
@@ -21,7 +21,6 @@ public class EnemyAI : MonoBehaviour
     public float MaxMemory = 100f;
     public float memory = 0f;
     public float threshold = 75f;
-
 
     Rigidbody rigid;
     // Start is called before the first frame update
@@ -32,11 +31,12 @@ public class EnemyAI : MonoBehaviour
         }
 
         rigid = this.GetComponent<Rigidbody>();
+        rigid.constraints = RigidbodyConstraints.FreezeRotation;
+
     }
 
     // Update is called once per frame
     void Update(){
-
         if (IsVisible())
             memory += intelligenceMod * Time.deltaTime;
 
@@ -55,27 +55,34 @@ public class EnemyAI : MonoBehaviour
     }
 
     bool IsVisible() {
-        RaycastHit hit;
-        Vector3 direction = this.transform.forward * .1f + (this.transform.position - player.transform.position).normalized;
-        if (Vector3.Angle(this.transform.forward, direction) > fov)
-            return false;
 
-        Ray ray = new Ray(this.transform.position, direction);
-        if (Physics.Raycast(ray, out hit, visibilityDistance)){
-            return true;
+        float visibility = 0;
+        RaycastHit hit;
+        Vector3 direction = this.transform.forward + eyeOffset + (this.transform.position - player.transform.position).normalized;
+        if (Vector3.SignedAngle(this.transform.forward, direction, Vector3.up) > fov) {
+            return false;
         }
 
-        return true;
+        Ray ray = new Ray(this.transform.forward + eyeOffset, direction);
+        if (Physics.Raycast(ray, out hit, visibilityDistance))
+        {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+        return false;
     }
 
     void MoveToPlayer() {
         Vector3 moveDir = Vector3.zero;
         RaycastHit hit;
-        Vector3 direction = this.transform.forward * .1f + (this.transform.position - player.transform.position).normalized;
+        Vector3 direction = this.transform.forward + eyeOffset + (this.transform.position - player.transform.position).normalized;
 
         moveDir += direction;
         
-        Ray ray = new Ray(this.transform.position, direction);
+        Ray ray = new Ray(this.transform.forward + eyeOffset, direction);
         if (Physics.Raycast(ray, out hit, visibilityDistance)){
             //Uh oh there is something in front of me
 
@@ -98,7 +105,7 @@ public class EnemyAI : MonoBehaviour
         Matrix4x4 temp = Gizmos.matrix;
         Gizmos.color = Color.HSVToRGB(.5f - (memory / MaxMemory) * .5f, 1, 1);
         
-        Gizmos.matrix = Matrix4x4.TRS(this.transform.forward * .1f + this.transform.position, this.transform.rotation, Vector3.one);
+        Gizmos.matrix = Matrix4x4.TRS(this.transform.forward + eyeOffset + this.transform.position, this.transform.rotation, Vector3.one);
         Gizmos.DrawFrustum(Vector3.zero, fov, visibilityDistance, 0, 1);
         Gizmos.matrix = temp;
     }
