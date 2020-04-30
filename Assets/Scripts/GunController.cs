@@ -9,6 +9,7 @@ public class GunController : MonoBehaviour
     public float ammoCapacity = 5f;
     public float ammoInGun = 5f;
     public float totalAmmo = 20f;
+    public float reserveAmmo = 0f;
     public GameObject bullet;
     public PlayerStats playerStats;
     static List<GameObject> bulletList = new List<GameObject>();
@@ -27,6 +28,7 @@ public class GunController : MonoBehaviour
 
     void Update()
     {
+        reserveAmmo = totalAmmo - ammoInGun;
         if (isEquipped)
         {
             if (Input.GetMouseButtonDown(0))
@@ -35,6 +37,7 @@ public class GunController : MonoBehaviour
                 {
                     GunFire();
                     ammoInGun--;
+                    totalAmmo--;
                 }
             }
             if (Input.GetKeyDown(KeyCode.R))
@@ -61,18 +64,18 @@ public class GunController : MonoBehaviour
             if (totalAmmo >= ammoCapacity)
             {
                 ammoInGun += ammoCapacity;
-                totalAmmo -= ammoCapacity;
+              //  totalAmmo -= ammoCapacity;
             }
             else if (totalAmmo > 0)
             {
                 ammoInGun += totalAmmo;
-                totalAmmo -= totalAmmo;
+               // totalAmmo -= totalAmmo;
             }
         }
         else if(ammoInGun < ammoCapacity)
         {
             float difference = ammoCapacity - ammoInGun;
-            totalAmmo -= difference;
+            //totalAmmo -= difference;
             ammoInGun += difference;
         }
         playerStats.totalAmmo = totalAmmo;
