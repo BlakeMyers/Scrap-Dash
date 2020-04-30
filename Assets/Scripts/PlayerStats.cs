@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    public float health = 100;
+    public float currentHealth = 100f;
+    public float maxHealth = 100f;
     public int armor = 0;
     public float speed = 10.0f;
     public float scrapCount = 0f;
     public float score = 0f;
     public int upgradePoints = 0;
+    public float totalAmmo = 30f;
     void Start()
     {
-
+        totalAmmo = 30f;
+        //currentHealth = 100f;
+        maxHealth = 100f;
     }
 
     // Update is called once per frame
@@ -32,7 +36,7 @@ public class PlayerStats : MonoBehaviour
     
     public void IncreaseHealth()
     {
-        health += health * 0.10f;
+        maxHealth += maxHealth * 0.10f;
         upgradePoints--;
     }
     public void IncreaseSpeed()
@@ -59,7 +63,19 @@ public class PlayerStats : MonoBehaviour
         playerGun.ammoCapacity += Mathf.Round(playerGun.ammoCapacity * 0.10f);
         playerGun.damage += Mathf.Round(playerGun.damage * 0.15f);
     } 
-
+    void PickupHealth()
+    {
+        currentHealth += 25f;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+    }
+    void PickupAmmo()
+    {
+        totalAmmo += 25f;
+        GetComponentInChildren<GunController>().totalAmmo = totalAmmo;
+    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Scrap")
@@ -75,6 +91,16 @@ public class PlayerStats : MonoBehaviour
         if (other.tag == "LargeScrap")
         {
             scrapCount += 15;
+            Destroy(other.gameObject);
+        }
+        if (other.tag == "Health")
+        {
+            PickupHealth();
+            Destroy(other.gameObject);
+        }
+        if (other.tag == "Ammo")
+        {
+            PickupAmmo();
             Destroy(other.gameObject);
         }
     }

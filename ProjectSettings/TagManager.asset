@@ -8,6 +8,8 @@ TagManager:
   - Scrap
   - SmallScrap
   - LargeScrap
+  - Health
+  - Ammo
   layers:
   - Default
   - TransparentFX

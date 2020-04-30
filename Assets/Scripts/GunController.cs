@@ -10,10 +10,13 @@ public class GunController : MonoBehaviour
     public float ammoInGun = 5f;
     public float totalAmmo = 20f;
     public GameObject bullet;
+    public PlayerStats playerStats;
     static List<GameObject> bulletList = new List<GameObject>();
     public bool isEquipped = false;
     void Start()
     {
+        ammoCapacity = 5f;
+        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
         for (int i = 0; i < 200; i++)
         {
             GameObject bulletObj = (GameObject)Instantiate(bullet);
@@ -44,6 +47,7 @@ public class GunController : MonoBehaviour
     public void GunEquipped()
     {
         isEquipped = true;
+        totalAmmo = playerStats.totalAmmo;
     }
     public void GunDropped()
     {
@@ -71,6 +75,7 @@ public class GunController : MonoBehaviour
             totalAmmo -= difference;
             ammoInGun += difference;
         }
+        playerStats.totalAmmo = totalAmmo;
     }
     public void GunFire()
     {

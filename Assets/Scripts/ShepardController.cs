@@ -53,6 +53,7 @@ public class ShepardController : MonoBehaviour
         {
             Vector3 pointToLook = cameraRay.GetPoint(rayLength);
             transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
+            characterController.transform.LookAt(new Vector3(pointToLook.x, transform.position.y, pointToLook.z));
         }
 
         //float angle = Mathf.Atan2(positionOnScreen.y - mousePos.y, positionOnScreen.x - mousePos.x) * Mathf.Rad2Deg;
