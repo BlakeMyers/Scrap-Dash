@@ -925,6 +925,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: WeaponPickup
       objectReference: {fileID: 0}
+    - target: {fileID: 5343888256924031166, guid: 3eb36fdb579683d4ca9d401e62815c3a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5343888256924031167, guid: 3eb36fdb579683d4ca9d401e62815c3a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1589,6 +1594,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WeaponPickup (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5343888256924031166, guid: 3eb36fdb579683d4ca9d401e62815c3a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5343888256924031167, guid: 3eb36fdb579683d4ca9d401e62815c3a,
         type: 3}
