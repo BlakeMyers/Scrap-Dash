@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class Credits_UI_Controller : MonoBehaviour
 {
@@ -28,6 +28,6 @@ public class Credits_UI_Controller : MonoBehaviour
 
     public void ReturnToMain()
     {
-        EditorSceneManager.LoadScene("Main Menu WIP");
+        SceneManager.LoadScene(0);
     }
 }
