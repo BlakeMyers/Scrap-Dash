@@ -10,7 +10,7 @@ public class EnemyAI : MonoBehaviour
     public float fov = 130;
     public float visibilityDistance = 5;
 
-    public float intelligenceMod = 10;
+    public float intelligenceMod = 30;
 
     public Vector3 eyeOffset = new Vector3(0, 0, 0);
 
@@ -20,7 +20,7 @@ public class EnemyAI : MonoBehaviour
 
     public float MaxMemory = 100f;
     public float memory = 0f;
-    public float threshold = 75f;
+    public float threshold = 50f;
 
     Rigidbody rigid;
     // Start is called before the first frame update
@@ -36,7 +36,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update(){
+    void LateUpdate(){
         if (IsVisible())
             memory += intelligenceMod * Time.deltaTime;
         else
@@ -75,7 +75,7 @@ public class EnemyAI : MonoBehaviour
         Debug.Log("Moving to Player");
         Vector3 moveDir = Vector3.zero;
         RaycastHit hit;
-        Vector3 direction = this.transform.forward + eyeOffset + (this.transform.position - player.transform.position).normalized;
+        Vector3 direction = player.transform.position - this.transform.position;
 
         moveDir += direction;
         

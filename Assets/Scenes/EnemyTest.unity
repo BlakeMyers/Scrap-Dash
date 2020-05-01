@@ -587,14 +587,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fov: 130
-  visibilityDistance: 5
-  intelligenceMod: 10
+  visibilityDistance: 10
+  intelligenceMod: 30
   eyeOffset: {x: 0, y: 0, z: 0}
-  Acceleration: 10
-  maxSpeed: 20
+  Acceleration: 1
+  maxSpeed: 8
   MaxMemory: 100
   memory: 0
-  threshold: 75
+  threshold: 50
 --- !u!1 &1848577509
 GameObject:
   m_ObjectHideFlags: 0
