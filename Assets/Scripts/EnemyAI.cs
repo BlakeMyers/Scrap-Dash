@@ -53,7 +53,6 @@ public class EnemyAI : MonoBehaviour
         }
 
         rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, maxSpeed);
-
     }
 
     bool IsVisible() {
@@ -72,7 +71,6 @@ public class EnemyAI : MonoBehaviour
     }
 
     void MoveToPlayer() {
-        Debug.Log("Moving to Player");
         Vector3 moveDir = Vector3.zero;
         RaycastHit hit;
         Vector3 direction = player.transform.position - this.transform.position;
@@ -92,11 +90,14 @@ public class EnemyAI : MonoBehaviour
     }
 
     void Idle() {
-        Debug.Log("Idle");
-        Vector3 direction = new Vector3(Random.Range(0, 1), 0, Random.Range(0, 1));
+        Vector3 direction = Quaternion.AngleAxis(Random.Range(-5f, 5f), Vector3.up) * this.transform.forward;
         rigid.MoveRotation(Quaternion.LookRotation(direction, Vector3.up));
 
-        rigid.velocity += direction * Acceleration;
+        rigid.velocity += direction * Acceleration * Random.Range(-1f,1f);
+        if(Vector3.Angle(rigid.velocity, direction) > 90)
+        {
+            rigid.velocity *= 0;
+        }
     }
 
     private void OnDrawGizmos(){
