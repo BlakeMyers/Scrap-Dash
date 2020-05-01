@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UI_Controller : MonoBehaviour
 {
@@ -68,5 +69,9 @@ public class UI_Controller : MonoBehaviour
 #else
         Application.Quit();
 #endif   
+    }
+    public void ToMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
