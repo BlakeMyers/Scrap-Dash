@@ -8,14 +8,14 @@ public class EnemyAI : MonoBehaviour
 
     public static Transform player;
     public float fov = 130;
-    public float visibilityDistance = 5;
+    public float visibilityDistance = 10;
 
     public float intelligenceMod = 30;
 
     public Vector3 eyeOffset = new Vector3(0, 0, 0);
 
-    public float Acceleration = 10;
-    public float maxSpeed = 20;
+    public float Acceleration = 1;
+    public float maxSpeed = 8;
 
 
     public float MaxMemory = 100f;
