@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class PhotonLauncher : MonoBehaviourPunCallbacks
 {
+    public SceneField gameScene;
+
     public GameObject mainMenu;
 
     public GameObject findOrCreateGameMenu;
@@ -45,6 +47,17 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         ShowRoomLobbyMenu();
+        isReadyInRoom = new Dictionary<Player, bool>();
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        isReadyInRoom.Add(newPlayer, false);
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        isReadyInRoom.Remove(otherPlayer);
     }
     #endregion
 
@@ -139,19 +152,42 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         gameLobbyMenu.SetActive(false);
         roomLobbyMenu.SetActive(false);
     }
+
+    private void CheckReadyStatus()
+    {
+        // Check if all players are ready, return if not.
+        foreach(bool readyStatus in isReadyInRoom.Values)
+        {
+            if(readyStatus == false)
+            {
+                return;
+            }
+        }
+
+        // All Players Ready - Start Game
+        LaunchGame();
+    }
+
+    private void LaunchGame()
+    {
+        if(!PhotonNetwork.IsMasterClient)
+        {
+            return;
+        }
+
+        PhotonNetwork.LoadLevel(gameScene.SceneName);
+    }
     #endregion
 
     #region RPCs
     [PunRPC]
-    public void ReadyPlayer(PhotonMessageInfo info)
+    public void SetReadyStatus(bool isReady, PhotonMessageInfo info)
     {
-        isReadyInRoom[info.Sender] = true;
-    }
-
-    [PunRPC]
-    public void UnReadyPlayer(PhotonMessageInfo info)
-    {
-        isReadyInRoom[info.Sender] = false;
+        isReadyInRoom[info.Sender] = isReady;
+        if(PhotonNetwork.IsMasterClient)
+        {
+            CheckReadyStatus();
+        }
     }
     #endregion
 }
