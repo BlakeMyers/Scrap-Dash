@@ -6,7 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PhotonLauncher : MonoBehaviourPunCallbacks
+public class PhotonLauncher : MonoBehaviourPunCallbacks, IOnEventCallback
 {
     public SceneField gameScene;
 
@@ -272,9 +272,23 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     #endregion
 
     #region Photon Events
-    public void SetReadyStatus(bool isReady, int senderKey)
+    public void OnEvent(EventData photonEvent)
     {
-        roomReadyStatuses[PhotonNetwork.CurrentRoom.Players[senderKey]] = isReady;
+        byte eventCode = photonEvent.Code;
+
+        if (eventCode == PhotonEventCodes.SET_READY_STATUS)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+
+            bool isReady = (bool)data[0];
+
+            SetReadyStatus(isReady, PhotonNetwork.CurrentRoom.Players[photonEvent.Sender]);
+        }
+    }
+
+    public void SetReadyStatus(bool isReady, Player sender)
+    {
+        roomReadyStatuses[sender] = isReady;
         UpdateRoomPlayerList();
         if (PhotonNetwork.IsMasterClient)
         {
