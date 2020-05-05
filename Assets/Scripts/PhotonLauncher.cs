@@ -25,6 +25,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks, IOnEventCallback
     public GameObject roomLobbyMenu;
     public GameObject roomLobbyMenuList;
     public GameObject roomLobbyMenuItem;
+    public GameObject roomLobbyReadyButton;
 
     private Dictionary<Player, bool> roomReadyStatuses;
     private GameObject selectedRoomItem;
@@ -157,6 +158,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks, IOnEventCallback
     public void ToggleReady()
     {
         isLocalPlayerReady = !isLocalPlayerReady;
+        roomLobbyReadyButton.GetComponentInChildren<TMP_Text>().text = isLocalPlayerReady ? "Unready" : "Ready";
         byte eventCode = PhotonEventCodes.SET_READY_STATUS;
         object[] content = new object[] { isLocalPlayerReady };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
