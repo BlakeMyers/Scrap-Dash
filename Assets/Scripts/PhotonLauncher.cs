@@ -33,6 +33,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     #region Monobehaviour Methods
     private void OnEnable()
     {
+        base.OnEnable();
         PhotonNetwork.AutomaticallySyncScene = true;
         InitializeNickname();
     }
