@@ -29,6 +29,8 @@ public class GunController : MonoBehaviour
     void Update()
     {
         reserveAmmo = totalAmmo - ammoInGun;
+        if (reserveAmmo < 0)
+            reserveAmmo = 0;
         if (isEquipped)
         {
             if (Input.GetMouseButtonDown(0))
@@ -75,8 +77,12 @@ public class GunController : MonoBehaviour
         else if(ammoInGun < ammoCapacity)
         {
             float difference = ammoCapacity - ammoInGun;
+            if (difference <= reserveAmmo)
+                ammoInGun += difference;
+            else {
+                ammoInGun += reserveAmmo;
+            }
             //totalAmmo -= difference;
-            ammoInGun += difference;
         }
         playerStats.totalAmmo = totalAmmo;
     }

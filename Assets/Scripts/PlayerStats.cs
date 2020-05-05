@@ -73,7 +73,7 @@ public class PlayerStats : MonoBehaviour
     public void UpgradeWeapon()
     {
         GunController playerGun = GetComponentInChildren<GunController>();
-        playerGun.ammoCapacity += Mathf.Round(playerGun.ammoCapacity * 0.10f);
+        playerGun.ammoCapacity += Mathf.Round(playerGun.ammoCapacity * 0.20f);
         playerGun.damage += Mathf.Round(playerGun.damage * 0.15f);
     } 
     void PickupHealth()
@@ -146,8 +146,9 @@ public class PlayerStats : MonoBehaviour
 
     public void Respawn(Vector3 pos)
     {
-        this.gameObject.transform.position = new Vector3(0f, transform.position.y, 0f);
-        Invoke("DropScrap(pos)", 0.1f);
+        this.gameObject.transform.position = new Vector3(Random.Range(0f,300f), 5f, Random.Range(0f, 300f));
+        DropScrap(pos);
+        //Invoke("DropScrap(pos)", 0.1f);
         currentHealth = maxHealth;
     }
 }
