@@ -33,29 +33,27 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     #region Monobehaviour Methods
     private void OnEnable()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         InitializeNickname();
-        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
-    }
-
-    public void OnDisable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
     #endregion
 
     #region PUN Callbacks
     public override void OnConnectedToMaster()
     {
+        Debug.Log("PUN: OnConnectedToMaster");
         ConnectToMasterServerLobby();
     }
 
     public override void OnJoinedLobby()
     {
+        Debug.Log("PUN: OnJoinedLobby");
         ShowFindOrCreateGameMenu();
     }
 
     public override void OnJoinedRoom()
     {
+        Debug.Log("PUN: OnJoinedRoom");
         ShowRoomLobbyMenu();
         roomReadyStatuses = new Dictionary<Player, bool>();
         roomReadyStatuses.Add(PhotonNetwork.LocalPlayer, false);
@@ -63,23 +61,27 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        Debug.Log("PUN: OnPlayerEnteredRoom - " + newPlayer.NickName);
         roomReadyStatuses.Add(newPlayer, false);
         UpdateRoomPlayerList();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        Debug.Log("PUN: OnPlayerLeftRoom - " + otherPlayer.NickName);
         roomReadyStatuses.Remove(otherPlayer);
         UpdateRoomPlayerList();
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
+        Debug.Log("PUN: OnDisconnected");
         ShowMainMenu();
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        Debug.Log("PUN: OnRoomListUpdate");
         foreach (Transform gameLobbyListItemTransform in gameLobbyMenuList.transform)
         {
             GameObject gameLobbyListItemObject = gameLobbyListItemTransform.gameObject;
@@ -269,23 +271,9 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     #endregion
 
     #region Photon Events
-    public void OnEvent(EventData photonEvent)
+    public void SetReadyStatus(bool isReady, int senderKey)
     {
-        byte eventCode = photonEvent.Code;
-
-        if (eventCode == PhotonEventCodes.SET_READY_STATUS)
-        {
-            object[] data = (object[])photonEvent.CustomData;
-
-            bool isReady = (bool)data[0];
-
-            SetReadyStatus(isReady, PhotonNetwork.CurrentRoom.Players[photonEvent.Sender]);
-        }
-    }
-
-    public void SetReadyStatus(bool isReady, Player sender)
-    {
-        roomReadyStatuses[sender] = isReady;
+        roomReadyStatuses[PhotonNetwork.CurrentRoom.Players[senderKey]] = isReady;
         UpdateRoomPlayerList();
         if (PhotonNetwork.IsMasterClient)
         {
