@@ -58,6 +58,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks, IOnEventCallback
         ShowRoomLobbyMenu();
         roomReadyStatuses = new Dictionary<Player, bool>();
         roomReadyStatuses.Add(PhotonNetwork.LocalPlayer, false);
+        UpdateRoomPlayerList();
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
