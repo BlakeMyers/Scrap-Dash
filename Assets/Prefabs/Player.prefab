@@ -50,7 +50,7 @@ GameObject:
   - component: {fileID: 8228099538042520570}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -229,3 +229,7 @@ MonoBehaviour:
   score: 0
   upgradePoints: 0
   totalAmmo: 30
+  ammoInGun: 5
+  reserveAmmo: 0
+  scrapDrop: {fileID: 8702924222108058851, guid: dcfbdb9fdba90e44c8db798a164f4b2f,
+    type: 3}

@@ -30,4 +30,23 @@ public class BulletController : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            EnemyAI enemy = other.GetComponent<EnemyAI>();
+            enemy.health -= 10f;
+            if (enemy.health <= 0)
+            {
+                Destroy(other.gameObject);
+            }
+            HideBullet();
+        }
+        if (other.tag == "Player")
+        {
+            other.GetComponent<PlayerStats>().TakeDamage(10f);
+        }
+
+    }
 }

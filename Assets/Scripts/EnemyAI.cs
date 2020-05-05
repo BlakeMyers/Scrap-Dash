@@ -23,6 +23,8 @@ public class EnemyAI : MonoBehaviour
     public float threshold = 50f;
 
     Rigidbody rigid;
+
+    public float health = 30f;
     // Start is called before the first frame update
     void Start()
     {
@@ -109,4 +111,11 @@ public class EnemyAI : MonoBehaviour
         Gizmos.matrix = temp;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            other.GetComponent<PlayerStats>().TakeDamage(20f);
+        }
+    }
 }
