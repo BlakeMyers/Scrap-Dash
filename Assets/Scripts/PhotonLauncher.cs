@@ -1,8 +1,10 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon;
+using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PhotonLauncher : MonoBehaviourPunCallbacks
 {
@@ -24,12 +26,20 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     public GameObject roomLobbyMenuList;
     public GameObject roomLobbyMenuItem;
 
-    private Dictionary<Player, bool> isReadyInRoom;
+    private Dictionary<Player, bool> roomReadyStatuses;
+    private GameObject selectedRoomItem;
+    private bool isLocalPlayerReady = false;
 
     #region Monobehaviour Methods
     private void OnEnable()
     {
         InitializeNickname();
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+    }
+
+    public void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
     }
     #endregion
 
@@ -47,21 +57,59 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         ShowRoomLobbyMenu();
-        isReadyInRoom = new Dictionary<Player, bool>();
+        roomReadyStatuses = new Dictionary<Player, bool>();
+        roomReadyStatuses.Add(PhotonNetwork.LocalPlayer, false);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        isReadyInRoom.Add(newPlayer, false);
+        roomReadyStatuses.Add(newPlayer, false);
+        UpdateRoomPlayerList();
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        isReadyInRoom.Remove(otherPlayer);
+        roomReadyStatuses.Remove(otherPlayer);
+        UpdateRoomPlayerList();
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        ShowMainMenu();
+    }
+
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        foreach (Transform gameLobbyListItemTransform in gameLobbyMenuList.transform)
+        {
+            GameObject gameLobbyListItemObject = gameLobbyListItemTransform.gameObject;
+            GameObject.Destroy(gameLobbyListItemObject);
+        }
+
+        foreach (RoomInfo room in roomList)
+        {
+            if (!room.RemovedFromList)
+            {
+                GameObject gameLobbyMenuListItem = GameObject.Instantiate(gameLobbyMenuItem, gameLobbyMenuList.transform);
+                gameLobbyMenuListItem.name = room.Name;
+                gameLobbyMenuListItem.GetComponentInChildren<TMP_Text>().text = room.Name;
+                gameLobbyMenuListItem.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    SelectRoom(gameLobbyMenuListItem);
+                });
+            }
+        }
     }
     #endregion
 
     #region Public Methods
+    public void ShowMainMenu()
+    {
+        HideAllMenus();
+        mainMenu.SetActive(true);
+    }
+
+    // Entry Point
     public void ConnectToGame()
     {
         if (!PhotonNetwork.IsConnected)
@@ -93,9 +141,23 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
         gameLobbyMenu.SetActive(true);
     }
 
-    public void JoinRoom(string roomName)
+    public void JoinRoom()
     {
-        PhotonNetwork.JoinRoom(roomName);
+        if(selectedRoomItem == null)
+        {
+            return;
+        }
+        PhotonNetwork.JoinRoom(selectedRoomItem.name);
+    }
+
+    public void ToggleReady()
+    {
+        isLocalPlayerReady = !isLocalPlayerReady;
+        byte eventCode = PhotonEventCodes.SET_READY_STATUS;
+        object[] content = new object[] { isLocalPlayerReady };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        SendOptions sendOptions = new SendOptions { Reliability = true };
+        PhotonNetwork.RaiseEvent(eventCode, content, raiseEventOptions, sendOptions);
     }
     #endregion
 
@@ -156,7 +218,7 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
     private void CheckReadyStatus()
     {
         // Check if all players are ready, return if not.
-        foreach(bool readyStatus in isReadyInRoom.Values)
+        foreach(bool readyStatus in roomReadyStatuses.Values)
         {
             if(readyStatus == false)
             {
@@ -177,14 +239,55 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks
 
         PhotonNetwork.LoadLevel(gameScene.SceneName);
     }
+
+    private void SelectRoom(GameObject lobbyListItem)
+    {
+        if (selectedRoomItem != null)
+        {
+            selectedRoomItem.GetComponent<Image>().color = Color.white;
+        }
+        selectedRoomItem = lobbyListItem;
+        selectedRoomItem.GetComponent<Image>().color = Color.blue;
+    }
+
+    private void UpdateRoomPlayerList()
+    {
+        foreach (Transform roomLobbyListItemTransform in roomLobbyMenuList.transform)
+        {
+            GameObject roomLobbyListItemObject = roomLobbyListItemTransform.gameObject;
+            GameObject.Destroy(roomLobbyListItemObject);
+        }
+
+        foreach (Player player in roomReadyStatuses.Keys)
+        {
+            GameObject roomLobbyMenuListItem = GameObject.Instantiate(roomLobbyMenuItem, roomLobbyMenuList.transform);
+            roomLobbyMenuListItem.name = player.NickName;
+            roomLobbyMenuListItem.GetComponentInChildren<TMP_Text>().text = player.NickName;
+            roomLobbyMenuListItem.GetComponentInChildren<Toggle>().isOn = roomReadyStatuses[player];
+        }
+    }
     #endregion
 
-    #region RPCs
-    [PunRPC]
-    public void SetReadyStatus(bool isReady, PhotonMessageInfo info)
+    #region Photon Events
+    public void OnEvent(EventData photonEvent)
     {
-        isReadyInRoom[info.Sender] = isReady;
-        if(PhotonNetwork.IsMasterClient)
+        byte eventCode = photonEvent.Code;
+
+        if (eventCode == PhotonEventCodes.SET_READY_STATUS)
+        {
+            object[] data = (object[])photonEvent.CustomData;
+
+            bool isReady = (bool)data[0];
+
+            SetReadyStatus(isReady, PhotonNetwork.CurrentRoom.Players[photonEvent.Sender]);
+        }
+    }
+
+    public void SetReadyStatus(bool isReady, Player sender)
+    {
+        roomReadyStatuses[sender] = isReady;
+        UpdateRoomPlayerList();
+        if (PhotonNetwork.IsMasterClient)
         {
             CheckReadyStatus();
         }

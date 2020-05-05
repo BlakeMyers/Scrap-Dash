@@ -4,28 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Menu_Controller : MonoBehaviour
+public class MainMenuController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public SceneField creditsScene;
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-
-    }
-
-    public void test_scene() {
-        SceneManager.LoadScene(1);
-    }
     public void Credits()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene(creditsScene.SceneName);
     }
 
     public void QuitGame() {
@@ -34,6 +19,5 @@ public class Menu_Controller : MonoBehaviour
 #else
         Application.Quit();
 #endif
-
     }
 }
