@@ -58,7 +58,10 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks, IOnEventCallback
         Debug.Log("PUN: OnJoinedRoom");
         ShowRoomLobbyMenu();
         roomReadyStatuses = new Dictionary<Player, bool>();
-        roomReadyStatuses.Add(PhotonNetwork.LocalPlayer, false);
+        foreach(Player player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            roomReadyStatuses.Add(player, false);
+        }
         UpdateRoomPlayerList();
     }
 
