@@ -14,6 +14,8 @@ public class PlayerStats : MonoBehaviour
     public float totalAmmo = 30f;
     public float ammoInGun = 5f;
     public float reserveAmmo = 0f;
+
+    public GameObject scrapDrop;
     void Start()
     {
         totalAmmo = 30f;
@@ -28,6 +30,11 @@ public class PlayerStats : MonoBehaviour
         {
             ammoInGun = GetComponentInChildren<GunController>().ammoInGun;
             reserveAmmo = GetComponentInChildren<GunController>().reserveAmmo;
+        }
+
+        if(currentHealth <= 0)
+        {
+            //Respawn(pos);       
         }
     }
 
@@ -109,5 +116,38 @@ public class PlayerStats : MonoBehaviour
             PickupAmmo();
             Destroy(other.gameObject);
         }
+    }
+    public void DropScrap(Vector3 pos)
+    {
+        GameObject droppedScrap = (GameObject)Instantiate(scrapDrop, pos, Quaternion.identity);
+        scrapCount -= 15;
+        if (scrapCount <= 0)
+        {
+            scrapCount = 0;
+        }
+        Debug.Log("scrap dropped");
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (armor > 0)
+        {
+            armor -= (int)damage;
+            if (armor < 0)
+            {
+                armor = 0;
+            }
+        }
+        else
+        {
+            currentHealth -= damage;
+        }
+    }
+
+    public void Respawn(Vector3 pos)
+    {
+        this.gameObject.transform.position = new Vector3(0f, transform.position.y, 0f);
+        Invoke("DropScrap(pos)", 0.1f);
+        currentHealth = maxHealth;
     }
 }
