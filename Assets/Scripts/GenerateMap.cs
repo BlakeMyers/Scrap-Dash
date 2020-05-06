@@ -89,12 +89,14 @@ public class GenerateMap : MonoBehaviour
             }
         }
 
-        for(int i = 0; i < numberOfBuildings; i++)
+        float terrainSize = pgcTerrain.gameObject.GetComponent<Terrain>().terrainData.size.x;
+
+        for (int i = 0; i < numberOfBuildings; i++)
         {
             float buildingHeight = heightFrequencyDistribution[Random.Range(0, heightFrequencyDistribution.Count)];
             float buildingFootprint = footprintFrequencyDistribution[Random.Range(0, footprintFrequencyDistribution.Count)];
 
-            Vector3 buildingPosition = Random.insideUnitSphere * pgcTerrain.gameObject.GetComponent<Terrain>().terrainData.size.x / 2 + new Vector3(pgcTerrain.gameObject.GetComponent<Terrain>().terrainData.size.x, 0, pgcTerrain.gameObject.GetComponent<Terrain>().terrainData.size.x) / 2;
+            Vector3 buildingPosition = new Vector3(Random.Range(terrainSize * 0.1f, terrainSize * 0.9f), 0, Random.Range(terrainSize * 0.1f, terrainSize * 0.9f));
             buildingPosition.y = pgcTerrain.gameObject.GetComponent<Terrain>().SampleHeight(buildingPosition);
 
             GameObject building = GameObject.CreatePrimitive(PrimitiveType.Cube);
