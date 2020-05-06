@@ -39,8 +39,12 @@ public class ItemSpawner : MonoBehaviour
         while(true){
 
             int index = Random.Range(0, items.Length);
-            int x = Random.Range(0, numRays.x);
-            int y = Random.Range(0, numRays.y);
+            int x, y;
+            do{
+                x = Random.Range(0, numRays.x);
+                y = Random.Range(0, numRays.y);
+            } while(!activeSpots[x, y]);
+            
 
             GameObject.Instantiate(items[index], hits[x, y].point, Quaternion.identity, this.transform);
             yield return new WaitForSeconds(spawnCooldown);
