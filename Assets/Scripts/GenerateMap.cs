@@ -1,4 +1,5 @@
 ﻿using PGC_Terrain;
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,15 @@ public class GenerateMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //GenerateRandomTerrain();
+        //BuildWalls();
+        //PlaceBuildings();
+    }
+
+    [PunRPC]
+    public void StartMapGeneration(int seed)
+    {
+        Random.InitState(seed);
         GenerateRandomTerrain();
         BuildWalls();
         PlaceBuildings();
