@@ -10,11 +10,20 @@ public class UI_Controller : MonoBehaviour
     public GameObject HudPanel;
     public GameObject PausePanel;
     public GameObject UpgradePanel;
+    public GameObject RecapPanel;
+    public bool isMulitplayer = true;
     public Text TimeText;
     public Text healthText;
     public Text GoalText;
     public Text ammoText;
     public Text UpgradeText;
+    public Text ArmorText;
+    public Text TotalScrapText;
+    public Text ScrapDroppedText;
+    public Text ScoreText;
+    int TotalScrap;
+    int DroppedScrap;
+    float FinalScore;
     bool pausetime = false;
     public float time = 600.0f;
     public GameObject Player;
@@ -23,33 +32,47 @@ public class UI_Controller : MonoBehaviour
     float playerAmmoInGun;
     float playerScrap;
     int UpgradePoints;
-    void Start()
-    { 
+    int playerArmor;
+    bool GameOver = false;
 
-    }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E)) {
-            if(!PausePanel.activeSelf)
-             UpgradePanel.SetActive(true);
+            if (!PausePanel.activeSelf)
+                UpgradePanel.SetActive(true);
+            if (Player.GetComponent<ShepardController>().isWeaponEquiped)
+                Player.GetComponentInChildren<GunController>().enabled = false;
         }
-        if (Input.GetKeyDown("escape"))
+        if (UpgradePanel.activeSelf) { 
+        
+        }
+            if (Input.GetKeyDown("escape"))
         {
             if (!UpgradePanel.activeSelf)
                 Pause();
             else {
                 UpgradePanel.SetActive(false);
+                Resume();
             }
         }
-        if (!pausetime) {
-            time -= Time.deltaTime;
+        if (!pausetime || isMulitplayer) {
+            if (time > 0)
+            {
+                time -= Time.deltaTime;
+            }
+            else {
+                if(!GameOver)
+                    DisplayStats();
+            }
         }
+
     }
 
     private void FixedUpdate()
     {
+        playerArmor = Player.GetComponent<PlayerStats>().armor;
         playerHealth = Player.GetComponent<PlayerStats>().currentHealth;
         playerReserveAmmo = Player.GetComponent<PlayerStats>().reserveAmmo;
         playerAmmoInGun = Player.GetComponent<PlayerStats>().ammoInGun;
@@ -62,6 +85,7 @@ public class UI_Controller : MonoBehaviour
         GoalText.text = "Scrap: " + playerScrap.ToString();
         healthText.text = "Health: " + playerHealth.ToString();
         UpgradeText.text = "Upgrade Points: " + UpgradePoints.ToString();
+        ArmorText.text = "Armor: " + playerArmor.ToString();
 
         if (playerHealth <= 0) {
             Player.GetComponent<PlayerStats>().Respawn(Player.transform.position);
@@ -102,7 +126,26 @@ public class UI_Controller : MonoBehaviour
             Player.GetComponent<PlayerStats>().MakeArmor();
 
     }
-    public void Resume() {
+
+    public void DisplayStats() {
+        GameOver = true;
+        RecapPanel.SetActive(true);
+        TotalScrap = Player.GetComponent<PlayerStats>().totalScrap;
+        DroppedScrap = Player.GetComponent<PlayerStats>().ScrapDropped;
+        Player.GetComponent<PlayerStats>().UpdateScore();
+        FinalScore = Player.GetComponent<PlayerStats>().score;
+        Player.GetComponentInChildren<GunController>().enabled = false;
+        Player.GetComponentInChildren<ShepardController>().enabled = false;
+
+        ScrapDroppedText.text = "Total Scrap Dropped: " + DroppedScrap.ToString();
+        TotalScrapText.text = "Total Scrap Collected: " + TotalScrap.ToString();
+        ScoreText.text = "Final Score: " + FinalScore.ToString("0.00");
+    
+    }
+    public void Resume()
+    {
+        if(Player.GetComponent<ShepardController>().isWeaponEquiped)
+             Player.GetComponentInChildren<GunController>().enabled = true;
         UpgradePanel.SetActive(false);
         PausePanel.SetActive(false);
         pausetime = false;
