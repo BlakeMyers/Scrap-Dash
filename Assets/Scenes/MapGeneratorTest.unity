@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -213,6 +213,103 @@ Transform:
   m_Father: {fileID: 998690972}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!1 &162836848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 162836850}
+  - component: {fileID: 162836849}
+  m_Layer: 0
+  m_Name: MapGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &162836849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162836848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a569bf96f8c92043882639aa7d4295d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pgcTerrain: {fileID: 735739701}
+  buildingHeightDistribution:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  buildingFootprintSizeDistribution:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  numberOfBuildings: 50
+  maxBuildingHeight: 20
+  minBuildingHeight: 3
+  maxBuildingFootprint: 15
+  minBuildingFootprint: 4
+--- !u!4 &162836850
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162836848}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 108.56271, y: 12.750787, z: 68.9814}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &213123858
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -819,7 +916,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &442437532
 Transform:
   m_ObjectHideFlags: 0
@@ -1612,6 +1709,7 @@ GameObject:
   - component: {fileID: 735739700}
   - component: {fileID: 735739699}
   - component: {fileID: 735739698}
+  - component: {fileID: 735739701}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -1677,6 +1775,45 @@ Transform:
   m_Father: {fileID: 998690972}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &735739701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735739697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 924ab8d1a92ea8e4dbd890b58543a48e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  perlinScale: 92.4
+  perlinFrequency: 5.01
+  perlinAmplitude: 0.011
+  perlinNumberOfOctaves: 2
+  perlinPersistence: 0.081
+  perlinLacunarity: 6.68
+  voronoiMountainRadius: 258
+  voronoiMountainHeight: 0.215
+  voronoiMountainCurvature: 3.91
+  mpdStartingSpread: 0.469
+  mpdSpreadReductionConstant: 0.475
+  minHeightDirt: 0
+  maxHeightDirt: 0
+  minSlopeDirt: 0
+  maxSlopeDirt: 0
+  minHeightGrass: 0
+  maxHeightGrass: 0
+  minSlopeGrass: 0
+  maxSlopeGrass: 0
+  minHeightRock: 0
+  maxHeightRock: 0
+  minSlopeRock: 0
+  maxSlopeRock: 0
+  minHeightSnow: 0
+  maxHeightSnow: 0
+  minSlopeSnow: 0
+  maxSlopeSnow: 0
 --- !u!1001 &774032888
 PrefabInstance:
   m_ObjectHideFlags: 0
