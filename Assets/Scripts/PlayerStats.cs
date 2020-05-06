@@ -14,7 +14,9 @@ public class PlayerStats : MonoBehaviour
     public float totalAmmo = 30f;
     public float ammoInGun = 5f;
     public float reserveAmmo = 0f;
-
+    public int totalScrap = 0;
+    public int ScrapDropped = 0;
+    Vector3 DeathPos;
     public GameObject scrapDrop;
     void Start()
     {
@@ -44,7 +46,7 @@ public class PlayerStats : MonoBehaviour
     }
     public void UpdateScore()
     {
-        score += Mathf.FloorToInt(scrapCount / 2);
+        score += Mathf.FloorToInt((totalScrap - ScrapDropped) / 2);
     }
     
     public void IncreaseHealth()
@@ -94,16 +96,19 @@ public class PlayerStats : MonoBehaviour
         if(other.tag == "Scrap")
         {
             scrapCount += 10;
+            totalScrap += 10;
             Destroy(other.gameObject);
         }
         if (other.tag == "SmallScrap")
         {
             scrapCount += 5;
+            totalScrap += 5;
             Destroy(other.gameObject);
         }
         if (other.tag == "LargeScrap")
         {
             scrapCount += 15;
+            totalScrap += 15;
             Destroy(other.gameObject);
         }
         if (other.tag == "Health")
@@ -117,10 +122,11 @@ public class PlayerStats : MonoBehaviour
             Destroy(other.gameObject);
         }
     }
-    public void DropScrap(Vector3 pos)
+    public void DropScrap(/*Vector3 pos*/)
     {
-        GameObject droppedScrap = (GameObject)Instantiate(scrapDrop, pos, Quaternion.identity);
+        GameObject droppedScrap = (GameObject)Instantiate(scrapDrop, DeathPos/*pos*/, Quaternion.identity);
         scrapCount -= 15;
+        ScrapDropped += 15;
         if (scrapCount <= 0)
         {
             scrapCount = 0;
@@ -146,9 +152,10 @@ public class PlayerStats : MonoBehaviour
 
     public void Respawn(Vector3 pos)
     {
+        DeathPos = gameObject.transform.position;
         this.gameObject.transform.position = new Vector3(Random.Range(0f,300f), 5f, Random.Range(0f, 300f));
-        DropScrap(pos);
-        //Invoke("DropScrap(pos)", 0.1f);
+        //DropScrap(pos);
+        Invoke("DropScrap", .5f);
         currentHealth = maxHealth;
     }
 }
