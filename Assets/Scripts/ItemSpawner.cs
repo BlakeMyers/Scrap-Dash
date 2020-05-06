@@ -10,6 +10,8 @@ public class ItemSpawner : MonoBehaviour
     public float spawnRange;
     public float spawnDistance;
 
+    public GameObject[] items;
+
     RaycastHit[,] hits; 
     bool[,] activeSpots;
 
@@ -18,20 +20,35 @@ public class ItemSpawner : MonoBehaviour
     
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start(){
         hits = new RaycastHit[numRays.x,numRays.y];
         activeSpots = new bool[numRays.x,numRays.y];
         offset = new Vector3(bounds.x * (1 / (float)numRays.x)/2, 0, bounds.z * (1 / (float)numRays.y)/2);
-        StartCoroutine(SpawnableAreas());
+        SpawnableAreas();
+
+        StartCoroutine(ItemSpawnerSystem());
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update(){
+
     }
 
-    IEnumerator SpawnableAreas(){
+    IEnumerator ItemSpawnerSystem(){
+
+        while(true){
+
+            int index = Random.Range(0, items.Length);
+            int x = Random.Range(0, numRays.x);
+            int y = Random.Range(0, numRays.y);
+
+            GameObject.Instantiate(items[index], hits[x, y].point, Quaternion.identity, this.transform);
+            yield return new WaitForSeconds(spawnCooldown);
+        }
+    }
+
+
+    void SpawnableAreas(){
         for(int i = 0; i < numRays.x; i++){
             for(int j = 0; j < numRays.y; j++){
                 
@@ -53,20 +70,16 @@ public class ItemSpawner : MonoBehaviour
                 float dist = Vector3.Distance(hits[x, y].point, position);
                 if(!(dist - spawnRange < spawnDistance && dist + spawnRange > spawnDistance)){
                     activeSpots[x, y] = false;
-                    yield return null;
                     continue;
                 }
 
                 for(int i = -1; i <= 1; i++){
                     for(int j = -1; j <= 1; j++){
                         activeSpots[x, y] |= (Vector3.Distance(hits[x, y].point, hits[x + i, y + j].point) < maxDist);
-                        yield return null;
-
                     }
                 }
             }
         }
-        yield return null;
     }
 
     public void OnDrawGizmos() {
