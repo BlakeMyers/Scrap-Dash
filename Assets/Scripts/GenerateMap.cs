@@ -38,7 +38,32 @@ public class GenerateMap : MonoBehaviour
     // Build walls around the outside of the map
     private void BuildWalls()
     {
-
+        float buildingsPerWall = 50;
+        float terrainSize = pgcTerrain.gameObject.GetComponent<Terrain>().terrainData.size.x;
+        float buildingSize = terrainSize / buildingsPerWall * 1.1f;
+        for (int i = 0; i < buildingsPerWall; i++)
+        {
+            // Bottom
+            GameObject bottom = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            bottom.transform.position = new Vector3(i * terrainSize / buildingsPerWall, 0,0);
+            bottom.transform.rotation = Quaternion.Euler(Random.Range(-3f, 3f), Random.Range(-15f, 15f), Random.Range(-3f, 3f));
+            bottom.transform.localScale = new Vector3(buildingSize, Random.Range(10f,20f), buildingSize);
+            // Top
+            GameObject top = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            top.transform.position = new Vector3(i * terrainSize / buildingsPerWall, 0, terrainSize);
+            top.transform.rotation = Quaternion.Euler(Random.Range(-3f, 3f), Random.Range(-15f, 15f), Random.Range(-3f, 3f));
+            top.transform.localScale = new Vector3(buildingSize, Random.Range(10f, 20f), buildingSize);
+            // Left
+            GameObject left = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            left.transform.position = new Vector3(0, 0, i * terrainSize / buildingsPerWall);
+            left.transform.rotation = Quaternion.Euler(Random.Range(-3f, 3f), Random.Range(-15f, 15f), Random.Range(-3f, 3f));
+            left.transform.localScale = new Vector3(buildingSize, Random.Range(10f, 20f), buildingSize);
+            // Right
+            GameObject right = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            right.transform.position = new Vector3(terrainSize, 0, i * terrainSize / buildingsPerWall);
+            right.transform.rotation = Quaternion.Euler(Random.Range(-3f, 3f), Random.Range(-15f, 15f), Random.Range(-3f, 3f));
+            right.transform.localScale = new Vector3(buildingSize, Random.Range(10f, 20f), buildingSize);
+        }
     }
 
     private void PlaceBuildings()
@@ -55,7 +80,6 @@ public class GenerateMap : MonoBehaviour
             {
                 heightFrequencyDistribution.Add(step * heightRange + minBuildingHeight);
             }
-
 
             int footprintFrequency = (int)(Mathf.Clamp01(buildingFootprintSizeDistribution.Evaluate(step)) * frequencyResolution);
             float footprintRange = maxBuildingFootprint - minBuildingFootprint;
