@@ -46,10 +46,10 @@ public class Enemy2AI : MonoBehaviour
                 }
                 else
                 {
-                    scrapArray = GameObject.FindGameObjectsWithTag("Scrap");
+                    scrapArray = GameObject.FindGameObjectsWithTag("SmallScrap");
                     if (scrapArray.Length != 0)
                     {
-                        scrap = GameObject.FindGameObjectWithTag("Scrap").transform;
+                        scrap = GameObject.FindGameObjectWithTag("SmallScrap").transform;
                     }
                 }
             }
@@ -61,6 +61,10 @@ public class Enemy2AI : MonoBehaviour
         if (scrap == null)
         {
             Invoke("FindScrap", 2f);
+        }
+        if(scrap == null)
+        {
+            return;
         }
         Vector3 moveDirection = scrap.position - transform.position;
         rb.MoveRotation(Quaternion.LookRotation(moveDirection, Vector3.up));
