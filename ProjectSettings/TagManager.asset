@@ -10,6 +10,8 @@ TagManager:
   - LargeScrap
   - Health
   - Ammo
+  - Enemy
+  - Obstacle
   layers:
   - Default
   - TransparentFX
