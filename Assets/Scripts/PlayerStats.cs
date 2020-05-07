@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviourPunCallbacks
 {
     public float currentHealth = 100f;
     public float maxHealth = 100f;
@@ -20,6 +21,11 @@ public class PlayerStats : MonoBehaviour
     public GameObject scrapDrop;
     void Start()
     {
+        if (!this.photonView.IsMine)
+        {
+            this.enabled = false;
+            return;
+        }
         totalAmmo = 30f;
         //currentHealth = 100f;
         maxHealth = 100f;
