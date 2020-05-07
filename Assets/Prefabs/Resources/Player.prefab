@@ -189,10 +189,10 @@ MonoBehaviour:
   totalScrap: 0
   ScrapDropped: 0
   scrapDrop: {fileID: 0}
-  audioSource: {fileID: 0}
-  ammo: {fileID: 0}
-  health: {fileID: 0}
-  scrap: {fileID: 0}
+  audioSource: {fileID: 1252826444811558277}
+  ammo: {fileID: 8300000, guid: af7aca1e8a8b3494481658a6925ca8ea, type: 3}
+  health: {fileID: 8300000, guid: af538c4b52d5f8a4f92f52cbaac5a189, type: 3}
+  scrap: {fileID: 8300000, guid: 9f8cb10777491214e9828381d5547e77, type: 3}
 --- !u!82 &1252826444811558277
 AudioSource:
   m_ObjectHideFlags: 0
