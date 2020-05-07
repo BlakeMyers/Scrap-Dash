@@ -16,22 +16,14 @@ public class ItemSpawner : MonoBehaviour
     bool[,] activeSpots;
 
     public float spawnCooldown;
-    Vector3 offset;
-    
 
     // Start is called before the first frame update
     void Start(){
-        hits = new RaycastHit[numRays.x,numRays.y];
-        activeSpots = new bool[numRays.x,numRays.y];
-        offset = new Vector3(bounds.x * (1 / (float)numRays.x)/2, 0, bounds.z * (1 / (float)numRays.y)/2);
+        hits = new RaycastHit[numRays.x, numRays.y];
+        activeSpots = new bool[numRays.x, numRays.y];
         SpawnableAreas();
 
         StartCoroutine(ItemSpawnerSystem());
-    }
-
-    // Update is called once per frame
-    void Update(){
-
     }
 
     IEnumerator ItemSpawnerSystem(){
@@ -56,31 +48,21 @@ public class ItemSpawner : MonoBehaviour
         for(int i = 0; i < numRays.x; i++){
             for(int j = 0; j < numRays.y; j++){
                 
-                Vector3 position = this.transform.position + offset + new Vector3(bounds.x * ((float)i / (float)numRays.x), 0, bounds.z * ((float)j / (float)numRays.y));
+                Vector3 position = this.transform.position + new Vector3(bounds.x * ((float)(i + 1) / (float)(numRays.x + 1)), bounds.y, bounds.z * ((float)(j + 1) / (float)(numRays.y + 1)));
 
-                if(Physics.Raycast(position, Vector3.down, out hits[i,j], Mathf.Abs(bounds.y))){}
+                Physics.Raycast(position, Vector3.down, out hits[i, j], Mathf.Abs(bounds.y));
             }
         } 
 
+        float topOfSpawnableArea = this.transform.position.y + spawnDistance + spawnRange / 2;
+        float bottomOfSpawnableArea = this.transform.position.y + spawnDistance - spawnRange / 2;
 
-        //Check if this spot in too high or next to one that is too high
-        float maxDist = 1.5f * Mathf.Max(bounds.x * (1 / (float)numRays.x), bounds.y * (1 / (float)numRays.y));
-        print(maxDist);
-
-        for(int x = 1; x < numRays.x - 1; x++){
-            for(int y = 1; y < numRays.y - 1; y++){
-                Vector3 offset = new Vector3(1f, 0, 1);
-                Vector3 position = this.transform.position + offset + new Vector3(bounds.x * ((float)x / (float)numRays.x), 0, bounds.z * ((float)y / (float)numRays.y));
-                float dist = Vector3.Distance(hits[x, y].point, position);
-                if(!(dist - spawnRange < spawnDistance && dist + spawnRange > spawnDistance)){
-                    activeSpots[x, y] = false;
-                    continue;
-                }
-
-                for(int i = -1; i <= 1; i++){
-                    for(int j = -1; j <= 1; j++){
-                        activeSpots[x, y] |= (Vector3.Distance(hits[x, y].point, hits[x + i, y + j].point) < maxDist);
-                    }
+        for (int x = 0; x < numRays.x; x++){
+            for(int y = 0; y < numRays.y; y++){
+                Vector3 position = this.transform.position + new Vector3(bounds.x * ((float)(x + 1) / (float)(numRays.x + 1)), bounds.y, bounds.z * ((float)(y + 1) / (float)(numRays.y + 1)));
+                
+                if(hits[x,y].point.y <= topOfSpawnableArea && hits[x, y].point.y >= bottomOfSpawnableArea) { 
+                    activeSpots[x, y] = true;
                 }
             }
         }
@@ -89,8 +71,8 @@ public class ItemSpawner : MonoBehaviour
     public void OnDrawGizmos() {
         for(int i = 0; i < numRays.x; i++){
             for(int j = 0; j < numRays.y; j++){
-                Vector3 position = this.transform.position + offset + new Vector3(bounds.x * ((float)i / (float)numRays.x), 0, bounds.z * ((float)j / (float)numRays.y));
-                Gizmos.DrawRay(position, Vector3.down);
+                Vector3 position = this.transform.position + new Vector3(bounds.x * ((float)(i + 1) / (float)(numRays.x + 1)), bounds.y, bounds.z * ((float)(j + 1) / (float)(numRays.y + 1)));
+                
 
                 if(hits != null){
                     if(activeSpots[i,j])
@@ -101,12 +83,14 @@ public class ItemSpawner : MonoBehaviour
                     Gizmos.DrawSphere(hits[i,j].point, .5f);
                 }
 
+                Gizmos.DrawRay(position, Vector3.down);
+
             }
         }
         Gizmos.color = Color.white;
 
 
-        Gizmos.DrawWireCube(this.transform.position + new Vector3(bounds.x/2, -spawnDistance, bounds.z/2), new Vector3(bounds.x, spawnRange, bounds.z));
+        Gizmos.DrawWireCube(this.transform.position + new Vector3(bounds.x/2, spawnDistance, bounds.z/2), new Vector3(bounds.x, spawnRange, bounds.z));
         Gizmos.DrawWireCube(this.transform.position + bounds/2, bounds);
     }
 }
