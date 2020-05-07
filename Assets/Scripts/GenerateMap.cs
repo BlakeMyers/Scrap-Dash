@@ -3,7 +3,7 @@ using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenerateMap : MonoBehaviour
+public class GenerateMap : MonoBehaviourPunCallbacks
 {
     public PGCTerrain pgcTerrain;
     public AnimationCurve buildingHeightDistribution;
@@ -22,10 +22,11 @@ public class GenerateMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //GenerateRandomTerrain();
-        //BuildWalls();
-        //PlaceBuildings();
-        StartMapGeneration(12);
+        if(PhotonNetwork.IsMasterClient)
+        {
+            // Call a buffered RPC for initialization so players get it whenever they join
+            this.photonView.RPC("StartMapGeneration", RpcTarget.AllBuffered, Random.Range(1, 1000));
+        }
     }
 
     [PunRPC]
