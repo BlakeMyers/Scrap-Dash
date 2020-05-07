@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShepardController : MonoBehaviour
+public class ShepardController : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     private float movementSpeed = 10.0f;
@@ -21,6 +22,11 @@ public class ShepardController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(!this.photonView.IsMine)
+        {
+            this.enabled = false;
+            return;
+        }
         movementSpeed = stats.speed;
         rotationSpeed = 250.0f;
         characterController = GetComponent<CharacterController>();
