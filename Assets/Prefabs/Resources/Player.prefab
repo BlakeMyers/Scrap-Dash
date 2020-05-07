@@ -47,6 +47,8 @@ GameObject:
   - component: {fileID: 8228099538042520569}
   - component: {fileID: 8228099538042520570}
   - component: {fileID: 1252826444811558277}
+  - component: {fileID: 4869758197514161957}
+  - component: {fileID: -3599526729192716173}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -187,10 +189,10 @@ MonoBehaviour:
   totalScrap: 0
   ScrapDropped: 0
   scrapDrop: {fileID: 0}
-  audioSource: {fileID: 1252826444811558277}
-  ammo: {fileID: 8300000, guid: af7aca1e8a8b3494481658a6925ca8ea, type: 3}
-  health: {fileID: 8300000, guid: af538c4b52d5f8a4f92f52cbaac5a189, type: 3}
-  scrap: {fileID: 8300000, guid: 9f8cb10777491214e9828381d5547e77, type: 3}
+  audioSource: {fileID: 0}
+  ammo: {fileID: 0}
+  health: {fileID: 0}
+  scrap: {fileID: 0}
 --- !u!82 &1252826444811558277
 AudioSource:
   m_ObjectHideFlags: 0
@@ -287,6 +289,43 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4869758197514161957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8228099538042520512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: -3599526729192716173}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &-3599526729192716173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8228099538042520512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
 --- !u!1001 &6076857385803976172
 PrefabInstance:
   m_ObjectHideFlags: 0

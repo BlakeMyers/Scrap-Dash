@@ -14,10 +14,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ShepardControllerTest.unity
     guid: 4074e1696bde0e64d803fdc075d1ecac
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/HUD_Test.unity
     guid: 1c530da54788f0e4eb9a83e85f2225ca
   - enabled: 0
     path: Assets/UI/Scenes/CreditsScene.unity
     guid: 84e859f799da8774dbc0503a56674f54
+  - enabled: 1
+    path: Assets/Scenes/GameSceneMP.unity
+    guid: 89c3049d897982c4fb9d065a9b4b369a
   m_configObjects: {}
