@@ -118,5 +118,9 @@ public class ShepardController : MonoBehaviourPunCallbacks
         {
             this.GetComponent<PlayerStats>().TakeDamage(10f);
         }
+        if (other.tag == "Enemy")
+        {
+            this.GetComponent<PlayerStats>().TakeDamage(20f);
+        }
     }
 }

@@ -1,12 +1,11 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviourPunCallbacks
 {
-
-    public static Transform player;
     public float fov = 130;
     public float visibilityDistance = 10;
 
@@ -25,20 +24,22 @@ public class EnemyAI : MonoBehaviour
     Rigidbody rigid;
 
     public float health = 30f;
+
+    private Transform closestPlayer;
     // Start is called before the first frame update
     void Start()
     {
-        if (player == null) {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+        if(!PhotonNetwork.IsMasterClient)
+        {
+            this.enabled = false;
+            return;
         }
-
         rigid = this.GetComponent<Rigidbody>();
         rigid.constraints = RigidbodyConstraints.FreezeRotation;
-
     }
 
     // Update is called once per frame
-    void LateUpdate(){
+    void Update(){
         if (IsVisible())
             memory += intelligenceMod * Time.deltaTime;
         else
@@ -57,9 +58,24 @@ public class EnemyAI : MonoBehaviour
         rigid.velocity = Vector3.ClampMagnitude(rigid.velocity, maxSpeed);
     }
 
+    private void FindClosestPlayer()
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        float closestDistance = float.MaxValue;
+        foreach(GameObject player in players)
+        {
+            float distance = Vector3.Distance(player.transform.position, this.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestPlayer = player.transform;
+            }
+        }
+    }
+
     bool IsVisible() {
         RaycastHit hit;
-        Vector3 direction = player.transform.position - this.transform.position;
+        Vector3 direction = closestPlayer.transform.position - this.transform.position;
         if (Vector3.Angle(this.transform.forward, direction) <= fov / 2) {
             Ray ray = new Ray(this.transform.position + eyeOffset, direction);
             Debug.DrawRay(ray.origin, ray.direction);
@@ -75,7 +91,7 @@ public class EnemyAI : MonoBehaviour
     void MoveToPlayer() {
         Vector3 moveDir = Vector3.zero;
         RaycastHit hit;
-        Vector3 direction = player.transform.position - this.transform.position;
+        Vector3 direction = closestPlayer.transform.position - this.transform.position;
 
         moveDir += direction;
         
@@ -109,13 +125,5 @@ public class EnemyAI : MonoBehaviour
         Gizmos.matrix = Matrix4x4.TRS(this.transform.forward + eyeOffset + this.transform.position, this.transform.rotation, Vector3.one);
         Gizmos.DrawFrustum(Vector3.zero, fov, visibilityDistance, 0, 1);
         Gizmos.matrix = temp;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            other.GetComponent<PlayerStats>().TakeDamage(20f);
-        }
     }
 }
