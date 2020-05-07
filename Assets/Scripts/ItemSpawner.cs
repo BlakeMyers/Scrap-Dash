@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemSpawner : MonoBehaviour
+public class ItemSpawner : MonoBehaviourPunCallbacks
 {
     public Vector3 bounds;
     public Vector2Int numRays;
@@ -19,6 +20,12 @@ public class ItemSpawner : MonoBehaviour
 
     // Start is called before the first frame update
     void Start(){
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            this.enabled = false;
+            return;
+        }
+
         hits = new RaycastHit[numRays.x, numRays.y];
         activeSpots = new bool[numRays.x, numRays.y];
         SpawnableAreas();
@@ -38,7 +45,7 @@ public class ItemSpawner : MonoBehaviour
             } while(!activeSpots[x, y]);
             
 
-            GameObject.Instantiate(items[index], hits[x, y].point, Quaternion.identity, this.transform);
+            PhotonNetwork.Instantiate(items[index].name, hits[x, y].point, Quaternion.identity);
             yield return new WaitForSeconds(spawnCooldown);
         }
     }
