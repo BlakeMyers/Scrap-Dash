@@ -13,18 +13,10 @@ public class GunController : MonoBehaviourPunCallbacks
     public float reserveAmmo = 0f;
     public GameObject bullet;
     public PlayerStats playerStats;
-    static List<GameObject> bulletList = new List<GameObject>();
     public bool isEquipped = false;
     void Start()
     {
         ammoCapacity = 5f;
-        
-        for (int i = 0; i < 200; i++)
-        {
-            GameObject bulletObj = PhotonNetwork.Instantiate(bullet.name, Vector3.zero, Quaternion.identity);
-            bulletObj.SetActive(false);
-            bulletList.Add(bulletObj);
-        }
     }
 
     void Update()
@@ -89,17 +81,11 @@ public class GunController : MonoBehaviourPunCallbacks
     }
     public void GunFire()
     {
-        for(int i = 0; i < bulletList.Count; i++)
-        {
-            if (!bulletList[i].activeInHierarchy)
-            {
-                bulletList[i].transform.position = transform.GetChild(0).position;
-                bulletList[i].transform.rotation = transform.rotation;
-                bulletList[i].SetActive(true);
-                Rigidbody bulletRB = bulletList[i].GetComponent<Rigidbody>();
-                bulletRB.AddForce(bulletList[i].transform.forward * muzzleVelocity);
-                break;
-            }
-        }
+        GameObject bulletObj = PhotonNetwork.Instantiate(bullet.name, Vector3.zero, Quaternion.identity);
+        bulletObj.transform.position = transform.GetChild(0).position;
+        bulletObj.transform.rotation = transform.rotation;
+        bulletObj.SetActive(true);
+        Rigidbody bulletRB = bulletObj.GetComponent<Rigidbody>();
+        bulletRB.AddForce(bulletObj.transform.forward * muzzleVelocity);
     }
 }
