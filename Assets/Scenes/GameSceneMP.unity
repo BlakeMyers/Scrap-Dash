@@ -795,7 +795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 0}
-  cameraOffset: {x: 0, y: 0, z: 0}
+  cameraOffset: {x: -0.24000001, y: 22.81, z: -9.62}
   smoothFactor: 0.01
   lookAtPlayer: 0
   rotateAroundPlayer: 0

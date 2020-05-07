@@ -14,12 +14,12 @@ public class CameraController : MonoBehaviour
     public bool lookAtPlayer = false;
     public bool rotateAroundPlayer = true;
     public float rotationSpeed = 10.0f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        playerTransform = GameObject.Find("Player").GetComponent<Transform>();
-        cameraOffset = transform.position - playerTransform.position;
-    }
+    //// Start is called before the first frame update
+    //void Start()
+    //{
+    //    playerTransform = GameObject.Find("Player").GetComponent<Transform>();
+    //    cameraOffset = transform.position - playerTransform.position;
+    //}
 
     // Update is called once per frame
     void Update()
