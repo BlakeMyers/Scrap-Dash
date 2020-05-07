@@ -24,6 +24,7 @@ public class ShepardController : MonoBehaviourPunCallbacks
     {
         if(!this.photonView.IsMine)
         {
+            GetComponent<CharacterController>().enabled = false;
             this.enabled = false;
             return;
         }

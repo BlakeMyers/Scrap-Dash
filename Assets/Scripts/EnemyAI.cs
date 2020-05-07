@@ -40,6 +40,8 @@ public class EnemyAI : MonoBehaviourPunCallbacks
 
     // Update is called once per frame
     void Update(){
+        FindClosestPlayer();
+
         if (IsVisible())
             memory += intelligenceMod * Time.deltaTime;
         else
