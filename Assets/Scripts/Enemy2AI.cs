@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,11 @@ public class Enemy2AI : MonoBehaviour
     public bool avoiding = false;
     void Start()
     {
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            this.enabled = false;
+            return;
+        }
         rb = GetComponent<Rigidbody>();
         FindScrap();
     }
@@ -104,17 +110,17 @@ public class Enemy2AI : MonoBehaviour
     {
         if(other.tag == "LargeScrap")
         {
-            Destroy(other.gameObject);
+            PhotonNetwork.Destroy(other.gameObject);
             FindScrap();
         }
         if (other.tag == "Scrap")
         {
-            Destroy(other.gameObject);
+            PhotonNetwork.Destroy(other.gameObject);
             FindScrap();
         }
         if (other.tag == "SmallScrap")
         {
-            Destroy(other.gameObject);
+            PhotonNetwork.Destroy(other.gameObject);
             FindScrap();
         }
     }
