@@ -103,34 +103,40 @@ public class PlayerStats : MonoBehaviourPunCallbacks
         {
             scrapCount += 10;
             totalScrap += 10;
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<PhotonView>().RequestOwnership();
+            PhotonNetwork.Destroy(other.gameObject);
         }
         if (other.tag == "SmallScrap")
         {
             scrapCount += 5;
             totalScrap += 5;
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<PhotonView>().RequestOwnership();
+            PhotonNetwork.Destroy(other.gameObject);
         }
         if (other.tag == "LargeScrap")
         {
             scrapCount += 15;
             totalScrap += 15;
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<PhotonView>().RequestOwnership();
+            PhotonNetwork.Destroy(other.gameObject);
         }
         if (other.tag == "Health")
         {
             PickupHealth();
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<PhotonView>().RequestOwnership();
+            PhotonNetwork.Destroy(other.gameObject);
         }
         if (other.tag == "Ammo")
         {
             PickupAmmo();
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<PhotonView>().RequestOwnership();
+            PhotonNetwork.Destroy(other.gameObject);
         }
     }
+
     public void DropScrap(/*Vector3 pos*/)
     {
-        GameObject droppedScrap = (GameObject)Instantiate(scrapDrop, DeathPos/*pos*/, Quaternion.identity);
+        GameObject droppedScrap = PhotonNetwork.Instantiate(scrapDrop.name, DeathPos/*pos*/, Quaternion.identity);
         scrapCount -= 15;
         ScrapDropped += 15;
         if (scrapCount <= 0)
