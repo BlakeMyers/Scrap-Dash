@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunController : MonoBehaviour
+public class GunController : MonoBehaviourPunCallbacks
 {
     public float muzzleVelocity = 1200f;
     public float damage = 5f;
@@ -12,7 +13,6 @@ public class GunController : MonoBehaviour
     public float reserveAmmo = 0f;
     public GameObject bullet;
     public PlayerStats playerStats;
-    static List<GameObject> bulletList = new List<GameObject>();
     public bool isEquipped = false;
     public AudioClip gunshot;
     public AudioClip reload;
@@ -21,13 +21,6 @@ public class GunController : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         ammoCapacity = 5f;
-        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
-        for (int i = 0; i < 200; i++)
-        {
-            GameObject bulletObj = (GameObject)Instantiate(bullet);
-            bulletObj.SetActive(false);
-            bulletList.Add(bulletObj);
-        }
     }
 
     void Update()
@@ -55,13 +48,13 @@ public class GunController : MonoBehaviour
 
     public void GunEquipped()
     {
+        playerStats = this.transform.root.gameObject.GetComponent<PlayerStats>();
         isEquipped = true;
         totalAmmo = playerStats.totalAmmo;
     }
     public void GunDropped()
     {
         isEquipped = false;
- 
     }
     public void GunReload()
     {
@@ -94,19 +87,15 @@ public class GunController : MonoBehaviour
     }
     public void GunFire()
     {
-        for(int i = 0; i < bulletList.Count; i++)
-        {
-            if (!bulletList[i].activeInHierarchy)
-            {
-                bulletList[i].transform.position = transform.GetChild(0).position;
-                bulletList[i].transform.rotation = transform.rotation;
-                bulletList[i].SetActive(true);
-                Rigidbody bulletRB = bulletList[i].GetComponent<Rigidbody>();
-                bulletRB.AddForce(bulletList[i].transform.forward * muzzleVelocity);
-                break;
-            }
-        }
+        GameObject bulletObj = PhotonNetwork.Instantiate(bullet.name, Vector3.zero, Quaternion.identity);
+        bulletObj.transform.position = transform.GetChild(0).position;
+        bulletObj.transform.rotation = transform.rotation;
+        bulletObj.SetActive(true);
+        Rigidbody bulletRB = bulletObj.GetComponent<Rigidbody>();
+        bulletRB.AddForce(bulletObj.transform.forward * muzzleVelocity);
+
         audioSource.clip = gunshot;
         audioSource.Play();
+
     }
 }

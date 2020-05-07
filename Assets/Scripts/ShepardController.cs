@@ -110,8 +110,17 @@ public class ShepardController : MonoBehaviourPunCallbacks
             Debug.Log("Weapon Detected");
             if (isWeaponEquiped == false)
             {
+                other.gameObject.GetComponent<PhotonView>().RequestOwnership();
                 EquipWeapon(other.GetComponentInParent<Transform>());
             }
+        }
+        if (other.tag == "Bullet")
+        {
+            this.GetComponent<PlayerStats>().TakeDamage(10f);
+        }
+        if (other.tag == "Enemy")
+        {
+            this.GetComponent<PlayerStats>().TakeDamage(20f);
         }
     }
 }
