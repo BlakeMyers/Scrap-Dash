@@ -25,6 +25,7 @@ public class GenerateMap : MonoBehaviour
         //GenerateRandomTerrain();
         //BuildWalls();
         //PlaceBuildings();
+        StartMapGeneration(12);
     }
 
     [PunRPC]
