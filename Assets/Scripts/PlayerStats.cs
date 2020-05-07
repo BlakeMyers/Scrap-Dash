@@ -19,6 +19,10 @@ public class PlayerStats : MonoBehaviourPunCallbacks
     public int ScrapDropped = 0;
     Vector3 DeathPos;
     public GameObject scrapDrop;
+    public AudioSource audioSource;
+    public AudioClip ammo;
+    public AudioClip health;
+    public AudioClip scrap;
     void Start()
     {
         if (!this.photonView.IsMine)
@@ -26,6 +30,8 @@ public class PlayerStats : MonoBehaviourPunCallbacks
             this.enabled = false;
             return;
         }
+
+        audioSource = GetComponent<AudioSource>();
         totalAmmo = 30f;
         //currentHealth = 100f;
         maxHealth = 100f;
@@ -105,32 +111,52 @@ public class PlayerStats : MonoBehaviourPunCallbacks
             totalScrap += 10;
             other.gameObject.GetComponent<PhotonView>().RequestOwnership();
             PhotonNetwork.Destroy(other.gameObject);
+
+            audioSource.clip = scrap;
+            audioSource.Play();
+
         }
         if (other.tag == "SmallScrap")
         {
             scrapCount += 5;
             totalScrap += 5;
+
             other.gameObject.GetComponent<PhotonView>().RequestOwnership();
             PhotonNetwork.Destroy(other.gameObject);
+
+            audioSource.clip = scrap;
+            audioSource.Play();
         }
         if (other.tag == "LargeScrap")
         {
             scrapCount += 15;
             totalScrap += 15;
+
             other.gameObject.GetComponent<PhotonView>().RequestOwnership();
             PhotonNetwork.Destroy(other.gameObject);
+
+            audioSource.clip = scrap;
+            audioSource.Play();
         }
         if (other.tag == "Health")
         {
             PickupHealth();
+
             other.gameObject.GetComponent<PhotonView>().RequestOwnership();
             PhotonNetwork.Destroy(other.gameObject);
+
+            audioSource.clip = health;
+            audioSource.Play();
         }
         if (other.tag == "Ammo")
         {
             PickupAmmo();
+
             other.gameObject.GetComponent<PhotonView>().RequestOwnership();
             PhotonNetwork.Destroy(other.gameObject);
+
+            audioSource.clip = ammo;
+            audioSource.Play();
         }
     }
 

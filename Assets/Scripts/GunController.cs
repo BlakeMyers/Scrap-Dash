@@ -14,8 +14,12 @@ public class GunController : MonoBehaviourPunCallbacks
     public GameObject bullet;
     public PlayerStats playerStats;
     public bool isEquipped = false;
+    public AudioClip gunshot;
+    public AudioClip reload;
+    public AudioSource audioSource;
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         ammoCapacity = 5f;
     }
 
@@ -78,6 +82,8 @@ public class GunController : MonoBehaviourPunCallbacks
             //totalAmmo -= difference;
         }
         playerStats.totalAmmo = totalAmmo;
+        audioSource.clip = reload;
+        audioSource.Play();
     }
     public void GunFire()
     {
@@ -87,5 +93,9 @@ public class GunController : MonoBehaviourPunCallbacks
         bulletObj.SetActive(true);
         Rigidbody bulletRB = bulletObj.GetComponent<Rigidbody>();
         bulletRB.AddForce(bulletObj.transform.forward * muzzleVelocity);
+
+        audioSource.clip = gunshot;
+        audioSource.Play();
+
     }
 }
