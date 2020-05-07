@@ -14,8 +14,12 @@ public class GunController : MonoBehaviour
     public PlayerStats playerStats;
     static List<GameObject> bulletList = new List<GameObject>();
     public bool isEquipped = false;
+    public AudioClip gunshot;
+    public AudioClip reload;
+    public AudioSource audioSource;
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         ammoCapacity = 5f;
         playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
         for (int i = 0; i < 200; i++)
@@ -85,6 +89,8 @@ public class GunController : MonoBehaviour
             //totalAmmo -= difference;
         }
         playerStats.totalAmmo = totalAmmo;
+        audioSource.clip = reload;
+        audioSource.Play();
     }
     public void GunFire()
     {
@@ -100,5 +106,7 @@ public class GunController : MonoBehaviour
                 break;
             }
         }
+        audioSource.clip = gunshot;
+        audioSource.Play();
     }
 }

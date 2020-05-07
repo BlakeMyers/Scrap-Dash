@@ -19,6 +19,10 @@ public class PlayerStats : MonoBehaviourPunCallbacks
     public int ScrapDropped = 0;
     Vector3 DeathPos;
     public GameObject scrapDrop;
+    public AudioSource audioSource;
+    public AudioClip ammo;
+    public AudioClip health;
+    public AudioClip scrap;
     void Start()
     {
         if (!this.photonView.IsMine)
@@ -26,6 +30,8 @@ public class PlayerStats : MonoBehaviourPunCallbacks
             this.enabled = false;
             return;
         }
+
+        audioSource = GetComponent<AudioSource>();
         totalAmmo = 30f;
         //currentHealth = 100f;
         maxHealth = 100f;
@@ -104,28 +110,38 @@ public class PlayerStats : MonoBehaviourPunCallbacks
             scrapCount += 10;
             totalScrap += 10;
             Destroy(other.gameObject);
+            audioSource.clip = scrap;
+            audioSource.Play();
         }
         if (other.tag == "SmallScrap")
         {
             scrapCount += 5;
             totalScrap += 5;
             Destroy(other.gameObject);
+            audioSource.clip = scrap;
+            audioSource.Play();
         }
         if (other.tag == "LargeScrap")
         {
             scrapCount += 15;
             totalScrap += 15;
             Destroy(other.gameObject);
+            audioSource.clip = scrap;
+            audioSource.Play();
         }
         if (other.tag == "Health")
         {
             PickupHealth();
             Destroy(other.gameObject);
+            audioSource.clip = health;
+            audioSource.Play();
         }
         if (other.tag == "Ammo")
         {
             PickupAmmo();
             Destroy(other.gameObject);
+            audioSource.clip = ammo;
+            audioSource.Play();
         }
     }
     public void DropScrap(/*Vector3 pos*/)
