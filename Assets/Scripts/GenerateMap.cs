@@ -19,6 +19,9 @@ public class GenerateMap : MonoBehaviourPunCallbacks
     [Range(3, 8)]
     public float minBuildingFootprint = 4;
 
+    // Solves missing shaders in build for primitives in URP....
+    public GameObject cubePrefab;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,22 +75,22 @@ public class GenerateMap : MonoBehaviourPunCallbacks
         for (int i = 0; i < buildingsPerWall; i++)
         {
             // Bottom
-            GameObject bottom = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject bottom = GameObject.Instantiate(cubePrefab);
             bottom.transform.position = new Vector3(i * terrainSize / buildingsPerWall, 0,0);
             bottom.transform.rotation = Quaternion.Euler(Random.Range(-3f, 3f), Random.Range(-15f, 15f), Random.Range(-3f, 3f));
             bottom.transform.localScale = new Vector3(buildingSize, Random.Range(10f,20f), buildingSize);
             // Top
-            GameObject top = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject top = GameObject.Instantiate(cubePrefab);
             top.transform.position = new Vector3(i * terrainSize / buildingsPerWall, 0, terrainSize);
             top.transform.rotation = Quaternion.Euler(Random.Range(-3f, 3f), Random.Range(-15f, 15f), Random.Range(-3f, 3f));
             top.transform.localScale = new Vector3(buildingSize, Random.Range(10f, 20f), buildingSize);
             // Left
-            GameObject left = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject left = GameObject.Instantiate(cubePrefab);
             left.transform.position = new Vector3(0, 0, i * terrainSize / buildingsPerWall);
             left.transform.rotation = Quaternion.Euler(Random.Range(-3f, 3f), Random.Range(-15f, 15f), Random.Range(-3f, 3f));
             left.transform.localScale = new Vector3(buildingSize, Random.Range(10f, 20f), buildingSize);
             // Right
-            GameObject right = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject right = GameObject.Instantiate(cubePrefab);
             right.transform.position = new Vector3(terrainSize, 0, i * terrainSize / buildingsPerWall);
             right.transform.rotation = Quaternion.Euler(Random.Range(-3f, 3f), Random.Range(-15f, 15f), Random.Range(-3f, 3f));
             right.transform.localScale = new Vector3(buildingSize, Random.Range(10f, 20f), buildingSize);
@@ -127,7 +130,7 @@ public class GenerateMap : MonoBehaviourPunCallbacks
             Vector3 buildingPosition = new Vector3(Random.Range(terrainSize * 0.1f, terrainSize * 0.9f), 0, Random.Range(terrainSize * 0.1f, terrainSize * 0.9f));
             buildingPosition.y = pgcTerrain.gameObject.GetComponent<Terrain>().SampleHeight(buildingPosition);
 
-            GameObject building = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject building = GameObject.Instantiate(cubePrefab);
             building.transform.position = buildingPosition;
             building.transform.localScale = new Vector3(buildingFootprint, buildingHeight * 2, buildingFootprint);
             building.transform.rotation = Quaternion.Euler(Random.Range(-7f, 7f), Random.Range(-45f, 45f), Random.Range(-7f, 7f));
