@@ -110,6 +110,7 @@ public class ShepardController : MonoBehaviourPunCallbacks
             Debug.Log("Weapon Detected");
             if (isWeaponEquiped == false)
             {
+                other.gameObject.GetComponent<PhotonView>().RequestOwnership();
                 EquipWeapon(other.GetComponentInParent<Transform>());
             }
         }
