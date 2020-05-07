@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletController : MonoBehaviour
+public class BulletController : MonoBehaviourPunCallbacks
 {
     // Start is called before the first frame update
     void Start()
@@ -29,24 +30,21 @@ public class BulletController : MonoBehaviour
     void HideBullet()
     {
         gameObject.SetActive(false);
+        this.photonView.RequestOwnership();
+        PhotonNetwork.Destroy(this.gameObject);
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy")
+        if (other.tag == "Enemy" && PhotonNetwork.IsMasterClient)
         {
             EnemyAI enemy = other.GetComponent<EnemyAI>();
             enemy.health -= 10f;
             if (enemy.health <= 0)
             {
-                Destroy(other.gameObject);
+                PhotonNetwork.Destroy(other.gameObject);
             }
             HideBullet();
         }
-        if (other.tag == "Player")
-        {
-            other.GetComponent<PlayerStats>().TakeDamage(10f);
-        }
-
     }
 }

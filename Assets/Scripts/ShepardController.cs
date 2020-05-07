@@ -114,5 +114,9 @@ public class ShepardController : MonoBehaviourPunCallbacks
                 EquipWeapon(other.GetComponentInParent<Transform>());
             }
         }
+        if (other.tag == "Bullet")
+        {
+            this.GetComponent<PlayerStats>().TakeDamage(10f);
+        }
     }
 }
