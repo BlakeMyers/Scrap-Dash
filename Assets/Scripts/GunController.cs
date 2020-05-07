@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using Photon.Pun;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunController : MonoBehaviour
+public class GunController : MonoBehaviourPunCallbacks
 {
     public float muzzleVelocity = 1200f;
     public float damage = 5f;
@@ -17,10 +18,10 @@ public class GunController : MonoBehaviour
     void Start()
     {
         ammoCapacity = 5f;
-        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        
         for (int i = 0; i < 200; i++)
         {
-            GameObject bulletObj = (GameObject)Instantiate(bullet);
+            GameObject bulletObj = PhotonNetwork.Instantiate(bullet.name, Vector3.zero, Quaternion.identity);
             bulletObj.SetActive(false);
             bulletList.Add(bulletObj);
         }
@@ -51,13 +52,13 @@ public class GunController : MonoBehaviour
 
     public void GunEquipped()
     {
+        playerStats = this.transform.root.gameObject.GetComponent<PlayerStats>();
         isEquipped = true;
         totalAmmo = playerStats.totalAmmo;
     }
     public void GunDropped()
     {
         isEquipped = false;
- 
     }
     public void GunReload()
     {
