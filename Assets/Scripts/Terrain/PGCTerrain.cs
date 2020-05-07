@@ -107,7 +107,7 @@ namespace PGC_Terrain
             int heightmapHeight = terrain.terrainData.heightmapResolution;
 
             // Output splatmap data
-            float[,,] splatmap = new float[alphamapWidth, alphamapHeight, 4];
+            float[,,] splatmap = new float[alphamapWidth, alphamapHeight, 2];
 
             for (int x = 0; x < alphamapWidth; x++)
             {
@@ -121,7 +121,7 @@ namespace PGC_Terrain
                     float height = terrain.terrainData.GetHeight((int)(xSample * heightmapWidth), (int)(ySample * heightmapHeight)) / terrain.terrainData.size.y;
                     float slope = terrain.terrainData.GetSteepness(xSample, ySample);
 
-                    float[] weights = new float[4];
+                    float[] weights = new float[2];
 
                     float dirtHeightInput = maxHeightDirt >= height && minHeightDirt <= height ? (Mathf.Sin(Mathf.PI * height / (maxHeightDirt - minHeightDirt)) + 1) / 2 : 0;
                     float grassHeightInput = maxHeightGrass >= height && minHeightGrass <= height ? (Mathf.Sin(Mathf.PI * height / (maxHeightGrass - minHeightGrass)) + 1) / 2 : 0;
@@ -134,15 +134,15 @@ namespace PGC_Terrain
                     float snowSlopeInput = maxSlopeSnow >= slope && minSlopeSnow <= slope ? (Mathf.Sin(Mathf.PI * slope / (maxSlopeSnow - minSlopeSnow)) + 1) / 2 : 0;
 
 
-                    weights[DIRT] = dirtHeightInput + dirtSlopeInput;
-                    weights[GRASS] = grassHeightInput + grassSlopeInput;
-                    weights[ROCK] = rockHeightInput + rockSlopeInput;
-                    weights[SNOW] = snowHeightInput + snowSlopeInput;
+                    weights[DIRT] = dirtHeightInput;// + dirtSlopeInput;
+                    weights[GRASS] = grassHeightInput;// + grassSlopeInput;
+                    //weights[ROCK] = rockHeightInput + rockSlopeInput;
+                    //weights[SNOW] = snowHeightInput + snowSlopeInput;
 
                     float weightsTotal = weights.Sum();
 
                     // Make sum of all weights 1 and set output splatmap
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < 2; i++)
                     {
                         weights[i] /= weightsTotal;
                         splatmap[x, y, i] = weights[i];

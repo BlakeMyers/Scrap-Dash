@@ -33,6 +33,7 @@ public class GenerateMap : MonoBehaviour
     {
         Random.InitState(seed);
         GenerateRandomTerrain();
+        ApplyTerrainTextures();
         BuildWalls();
         PlaceBuildings();
     }
@@ -44,6 +45,21 @@ public class GenerateMap : MonoBehaviour
         pgcTerrain.perlinAmplitude = 0.01f;
 
         pgcTerrain.ApplyPerlinNoise(pgcTerrain.gameObject.GetComponent<Terrain>(), false);
+    }
+
+    private void ApplyTerrainTextures()
+    {
+        pgcTerrain.minHeightDirt = 0f;
+        pgcTerrain.maxHeightDirt = 0.0015f;
+        pgcTerrain.minHeightGrass = 0.001f;
+        pgcTerrain.maxHeightGrass = 30f;
+
+        //pgcTerrain.minSlopeDirt = 0f;
+        //pgcTerrain.maxSlopeDirt = 90f;
+        //pgcTerrain.minSlopeGrass = 0f;
+        //pgcTerrain.maxSlopeGrass = 90f;
+
+        pgcTerrain.ApplyTerrainTextures(pgcTerrain.gameObject.GetComponent<Terrain>());
     }
 
     // Build walls around the outside of the map
