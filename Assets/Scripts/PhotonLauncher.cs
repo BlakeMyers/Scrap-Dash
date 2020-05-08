@@ -37,6 +37,10 @@ public class PhotonLauncher : MonoBehaviourPunCallbacks, IOnEventCallback
         base.OnEnable();
         PhotonNetwork.AutomaticallySyncScene = true;
         InitializeNickname();
+        if(PhotonNetwork.IsConnected && PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
     }
     #endregion
 
