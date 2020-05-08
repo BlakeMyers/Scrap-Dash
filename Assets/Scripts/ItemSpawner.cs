@@ -45,7 +45,7 @@ public class ItemSpawner : MonoBehaviourPunCallbacks
             } while(!activeSpots[x, y]);
             
 
-            PhotonNetwork.Instantiate(items[index].name, hits[x, y].point, Quaternion.identity);
+            PhotonNetwork.Instantiate(items[index].name, hits[x, y].point + Vector3.up * 0.2f, Quaternion.identity);
             yield return new WaitForSeconds(spawnCooldown);
         }
     }
