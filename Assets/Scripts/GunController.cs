@@ -49,11 +49,15 @@ public class GunController : MonoBehaviourPunCallbacks
     public void GunEquipped()
     {
         playerStats = this.transform.root.gameObject.GetComponent<PlayerStats>();
+        this.GetComponent<PhotonTransformView>().m_SynchronizePosition = false;
+        this.GetComponent<PhotonTransformView>().m_SynchronizeRotation = false;
         isEquipped = true;
         totalAmmo = playerStats.totalAmmo;
     }
     public void GunDropped()
     {
+        this.GetComponent<PhotonTransformView>().m_SynchronizePosition = true;
+        this.GetComponent<PhotonTransformView>().m_SynchronizeRotation = true;
         isEquipped = false;
     }
     public void GunReload()
@@ -96,6 +100,5 @@ public class GunController : MonoBehaviourPunCallbacks
 
         audioSource.clip = gunshot;
         audioSource.Play();
-
     }
 }
