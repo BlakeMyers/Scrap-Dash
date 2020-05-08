@@ -21,6 +21,8 @@ public class UI_Controller : MonoBehaviour
     public Text TotalScrapText;
     public Text ScrapDroppedText;
     public Text ScoreText;
+    public Slider slider;
+    public Text VolumeText;
     int TotalScrap;
     int DroppedScrap;
     float FinalScore;
@@ -95,6 +97,8 @@ public class UI_Controller : MonoBehaviour
     private void Pause()
     {
         if (!pausetime) {
+            if (Player.GetComponent<ShepardController>().isWeaponEquiped)
+                Player.GetComponentInChildren<GunController>().enabled = false;
             pausetime = true;
             PausePanel.SetActive(true);
         }
@@ -149,6 +153,11 @@ public class UI_Controller : MonoBehaviour
         UpgradePanel.SetActive(false);
         PausePanel.SetActive(false);
         pausetime = false;
+    }
+
+    public void UpdateVolume() {
+        AudioListener.volume = slider.value;
+        VolumeText.text = slider.value.ToString("0.00");
     }
     public void QuitGame()
     {
