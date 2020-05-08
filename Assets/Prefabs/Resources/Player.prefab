@@ -189,7 +189,8 @@ MonoBehaviour:
   reserveAmmo: 0
   totalScrap: 0
   ScrapDropped: 0
-  scrapDrop: {fileID: 0}
+  scrapDrop: {fileID: 8702924222108058851, guid: dcfbdb9fdba90e44c8db798a164f4b2f,
+    type: 3}
   audioSource: {fileID: 1252826444811558277}
   ammo: {fileID: 8300000, guid: af7aca1e8a8b3494481658a6925ca8ea, type: 3}
   health: {fileID: 8300000, guid: af538c4b52d5f8a4f92f52cbaac5a189, type: 3}
