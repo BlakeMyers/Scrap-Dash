@@ -32,6 +32,7 @@ public class ShepardController : MonoBehaviourPunCallbacks
         rotationSpeed = 250.0f;
         characterController = GetComponent<CharacterController>();
         rigidBody = GetComponent<Rigidbody>();
+        isWeaponEquiped = true;
         jump = 20.0f;
     }
 
