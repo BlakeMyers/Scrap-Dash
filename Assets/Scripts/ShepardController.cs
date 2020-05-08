@@ -87,21 +87,13 @@ public class ShepardController : MonoBehaviourPunCallbacks
     {
         pickUpCollider.isTrigger = false;
         Transform weapon = transform.GetChild(0).GetChild(0);
-        weapon.SetParent(null);
-        Rigidbody weaponRB = weapon.GetComponent<Rigidbody>();
-        weaponRB.isKinematic = false;
-        weaponRB.AddForce(transform.right*150);
+        weapon.GetComponent<PhotonView>().RPC("GunDropped", RpcTarget.All);
         pickUpCollider.isTrigger = true;
-        weapon.GetComponent<GunController>().GunDropped();
         isWeaponEquiped = false;
     }
-    public void EquipWeapon(Transform weaponTransform)
+    public void EquipWeapon(GameObject weapon)
     {
-        weaponTransform.rotation = transform.rotation;
-        weaponTransform.SetParent(transform.GetChild(0));
-        weaponTransform.position = transform.GetChild(0).position;
-        weaponTransform.GetComponent<Rigidbody>().isKinematic = true;
-        weaponTransform.GetComponent<GunController>().GunEquipped();
+        weapon.GetComponent<PhotonView>().RPC("GunEquipped", RpcTarget.All, this.photonView.ViewID);
         isWeaponEquiped = true;
     }
     private void OnTriggerEnter(Collider other)
@@ -112,7 +104,7 @@ public class ShepardController : MonoBehaviourPunCallbacks
             if (isWeaponEquiped == false)
             {
                 other.gameObject.GetComponent<PhotonView>().RequestOwnership();
-                EquipWeapon(other.GetComponentInParent<Transform>());
+                EquipWeapon(other.gameObject);
             }
         }
         if (other.tag == "Bullet")

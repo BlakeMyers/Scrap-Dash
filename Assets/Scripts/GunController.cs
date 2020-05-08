@@ -46,20 +46,48 @@ public class GunController : MonoBehaviourPunCallbacks
         }
     }
 
-    public void GunEquipped()
+    [PunRPC]
+    public void GunEquipped(int viewID)
     {
-        playerStats = this.transform.root.gameObject.GetComponent<PlayerStats>();
-        this.GetComponent<PhotonTransformView>().m_SynchronizePosition = false;
-        this.GetComponent<PhotonTransformView>().m_SynchronizeRotation = false;
-        isEquipped = true;
-        totalAmmo = playerStats.totalAmmo;
+        PhotonView playerView = PhotonNetwork.GetPhotonView(viewID);
+
+        this.transform.rotation = playerView.gameObject.transform.rotation;
+        this.transform.SetParent(playerView.gameObject.transform.GetChild(0));
+        this.transform.position = playerView.gameObject.transform.GetChild(0).position;
+        this.GetComponent<Rigidbody>().isKinematic = true;
+
+        if (playerView.Owner == this.photonView.Owner)
+        {
+            playerStats = this.transform.root.gameObject.GetComponent<PlayerStats>();
+            isEquipped = true;
+            totalAmmo = playerStats.totalAmmo;
+        }
+        if (PhotonNetwork.IsMasterClient)
+        {
+            this.GetComponent<PhotonTransformView>().m_SynchronizePosition = false;
+            this.GetComponent<PhotonTransformView>().m_SynchronizeRotation = false;
+        }
+
+        
     }
+
+    [PunRPC]
     public void GunDropped()
     {
-        this.GetComponent<PhotonTransformView>().m_SynchronizePosition = true;
-        this.GetComponent<PhotonTransformView>().m_SynchronizeRotation = true;
-        isEquipped = false;
+        if(this.photonView.IsMine)
+        {
+            isEquipped = false;
+        }
+        this.transform.SetParent(null);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            this.GetComponent<PhotonTransformView>().m_SynchronizePosition = true;
+            this.GetComponent<PhotonTransformView>().m_SynchronizeRotation = true;
+            this.GetComponent<Rigidbody>().AddForce(transform.right * 150);
+        }
+        this.GetComponent<Rigidbody>().isKinematic = false;
     }
+
     public void GunReload()
     {
         if (ammoInGun == 0)

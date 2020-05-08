@@ -101,7 +101,10 @@ public class PlayerStats : MonoBehaviourPunCallbacks
     void PickupAmmo()
     {
         totalAmmo += 25f;
-        GetComponentInChildren<GunController>().totalAmmo = totalAmmo;
+        if (GetComponentInChildren<GunController>() != null)
+        {
+            GetComponentInChildren<GunController>().totalAmmo = totalAmmo;
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
