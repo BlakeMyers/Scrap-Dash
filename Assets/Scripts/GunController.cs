@@ -127,7 +127,7 @@ public class GunController : MonoBehaviourPunCallbacks
     public void GunFire()
     {
         GameObject bulletObj = PhotonNetwork.Instantiate(bullet.name, Vector3.zero, Quaternion.identity);
-        bulletObj.transform.position = transform.GetChild(0).position;
+        bulletObj.transform.position = transform.GetChild(0).position + transform.forward * 3f;
         bulletObj.transform.rotation = transform.rotation;
         bulletObj.SetActive(true);
         Rigidbody bulletRB = bulletObj.GetComponent<Rigidbody>();
