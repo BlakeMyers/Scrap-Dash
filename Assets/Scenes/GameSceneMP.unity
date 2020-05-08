@@ -587,7 +587,6 @@ MonoBehaviour:
   - {fileID: 8702924222108058851, guid: dcfbdb9fdba90e44c8db798a164f4b2f, type: 3}
   - {fileID: 5276251389060630783, guid: 9b347f95918add24ea70991bfb9b6b2c, type: 3}
   - {fileID: 6497873586610407396, guid: 208fce7915a034846b762551003972fe, type: 3}
-  - {fileID: 5343888256924031163, guid: 3eb36fdb579683d4ca9d401e62815c3a, type: 3}
   spawnCooldown: 1
 --- !u!1001 &1448312497
 PrefabInstance:

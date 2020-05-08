@@ -13,14 +13,21 @@ public class GunController : MonoBehaviourPunCallbacks
     public float reserveAmmo = 0f;
     public GameObject bullet;
     public PlayerStats playerStats;
-    public bool isEquipped = false;
+    public bool isEquipped = true;
     public AudioClip gunshot;
     public AudioClip reload;
     public AudioSource audioSource;
     void Start()
     {
+        if (!this.transform.root.GetComponent<PhotonView>().IsMine)
+        {
+            this.enabled = false;
+            return;
+        }
+        isEquipped = true;
         audioSource = GetComponent<AudioSource>();
         ammoCapacity = 5f;
+        totalAmmo = playerStats.totalAmmo;
     }
 
     void Update()

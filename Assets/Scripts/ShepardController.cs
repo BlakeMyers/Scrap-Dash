@@ -48,7 +48,7 @@ public class ShepardController : MonoBehaviourPunCallbacks
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            DropWeapon();
+            //DropWeapon();
         }
         float vertical = Input.GetAxis("Vertical");
         Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
