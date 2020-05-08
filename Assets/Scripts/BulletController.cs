@@ -45,6 +45,10 @@ public class BulletController : MonoBehaviourPunCallbacks
                 PhotonNetwork.Destroy(other.gameObject);
             }
             HideBullet();
+        } 
+        if (other.tag == "Player" && PhotonNetwork.IsMasterClient)
+        {
+            HideBullet();
         }
     }
 }
